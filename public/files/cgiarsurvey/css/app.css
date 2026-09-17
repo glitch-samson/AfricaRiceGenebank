@@ -1,0 +1,160 @@
+/* CGIAR Genebank Survey - Local Styles */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;scroll-behavior:smooth}
+section,[id^="section"],#review{scroll-margin-top:90px}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;background:#faf8f5;color:#1a1a1a;line-height:1.6}
+img{max-width:100%;height:auto;display:block}
+
+/* Typography */
+.font-display{font-family:'Playfair Display',Georgia,serif}
+.text-cgiar-green{color:#3d7a3d}
+.text-deep-blue{color:#1a2a4a}
+.text-warm-gold{color:#c9a84c}
+.bg-cgiar-green{background-color:#3d7a3d}
+.bg-cgiar-green-light{background-color:#5a9e5a}
+.bg-deep-blue{background-color:#1a2a4a}
+.bg-warm-gold{background-color:#c9a84c}
+.bg-cream{background-color:#faf8f5}
+.bg-stone{background-color:#f0ede8}
+
+/* Hero */
+.hero-gradient{background:linear-gradient(135deg,#1a2a4a 0%,#2a4a6a 50%,#3d7a3d 100%)}
+
+/* Progress */
+.progress-bar{height:4px;background:#e5e5e5;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:#3d7a3d;transition:width .4s ease}
+
+/* Buttons */
+.btn-primary{background:#3d7a3d;color:#fff;padding:.75rem 1.5rem;border-radius:8px;font-weight:500;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .2s ease;font-size:1rem}
+.btn-primary:hover{background:#5a9e5a;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-secondary{background:#fff;color:#1a2a4a;border:1.5px solid #e5e5e5;padding:.75rem 1.5rem;border-radius:8px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;transition:all .2s ease;font-size:1rem}
+.btn-secondary:hover{background:#f0ede8;border-color:#c9a84c}
+
+/* Cards */
+.section-card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);transition:transform .2s ease,box-shadow .2s ease}
+.section-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.06),0 16px 40px rgba(0,0,0,.08)}
+.question-card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.06);padding:1.5rem 2rem;margin-bottom:1.5rem;transition:box-shadow .2s ease}
+.question-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08)}
+
+/* Section banner */
+.section-banner{background:linear-gradient(135deg,#1a2a4a 0%,#2a4a6a 100%);color:#fff;padding:2rem;border-radius:16px 16px 0 0}
+.section-banner img{width:100%;height:200px;object-fit:cover;border-radius:8px;margin-top:1rem;opacity:.9}
+
+/* Question elements */
+.question-label{font-weight:600;color:#1a2a4a;font-size:1.05rem;line-height:1.5}
+.question-subtext{color:#666;font-size:.9rem;margin-top:.25rem}
+.required-star{color:#dc2626;margin-right:.25rem}
+
+/* Form inputs */
+.text-input{width:100%;padding:.6rem .875rem;border:1.5px solid #e5e5e5;border-radius:8px;font-size:.95rem;font-family:inherit;transition:border-color .2s ease}
+.text-input:focus{outline:none;border-color:#3d7a3d}
+.longtext-input{width:100%;min-height:120px;padding:.75rem;border:1.5px solid #e5e5e5;border-radius:10px;font-family:inherit;font-size:.95rem;transition:border-color .2s ease;resize:vertical}
+.longtext-input:focus{outline:none;border-color:#3d7a3d}
+
+/* Options */
+.option-card{border:1.5px solid #e5e5e5;border-radius:10px;padding:.75rem 1rem;cursor:pointer;transition:all .15s ease;margin-bottom:.5rem}
+.option-card:hover{border-color:#3d7a3d;background:#f8faf8}
+.option-card.selected{border-color:#3d7a3d;background:#f0f7f0}
+.option-card input[type="radio"],.option-card input[type="checkbox"]{margin-right:.75rem;accent-color:#3d7a3d;width:1.1rem;height:1.1rem}
+
+/* Matrix */
+.matrix-table{width:100%;border-collapse:collapse;min-width:400px}
+.matrix-table th,.matrix-table td{padding:.5rem .75rem;text-align:center}
+.matrix-table th{font-weight:600;color:#1a2a4a;font-size:.85rem}
+.matrix-table td:first-child{text-align:left;font-size:.9rem;color:#444}
+.matrix-table tr{border-bottom:1px solid #f0f0f0}
+.matrix-table input[type="radio"]{accent-color:#3d7a3d;width:1.1rem;height:1.1rem;cursor:pointer}
+
+/* Ranking */
+.ranking-row{display:flex;align-items:center;gap:1rem;padding:.75rem 1rem;border:1.5px solid #e5e5e5;border-radius:10px;margin-bottom:.5rem;transition:border-color .2s ease}
+.ranking-row:hover{border-color:#3d7a3d;background:#f8faf8}
+.ranking-row.ranked{border-color:#3d7a3d;background:#f0f7f0}
+.ranking-label{flex:1;font-size:.95rem}
+.ranking-select{width:70px;padding:.4rem;border-radius:6px;border:1.5px solid #ddd;text-align:center;font-size:.95rem}
+
+/* Navigation */
+.nav-dots{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:wrap}
+.nav-dot{width:10px;height:10px;border-radius:50%;background:#ddd;transition:all .3s ease;border:none;cursor:pointer;padding:0}
+.nav-dot.active{background:#3d7a3d;transform:scale(1.3)}
+.nav-dot.completed{background:#5a9e5a}
+
+/* Layout */
+.container{max-width:72rem;margin:0 auto;padding:0 1rem}
+.container-narrow{max-width:56rem;margin:0 auto;padding:0 1rem}
+
+/* Module navigation (progressive enhancement).
+   Default (no JS): all modules visible so the survey is always usable.
+   Only when survey.js has successfully initialised do we add .js-enabled to <html>,
+   which then hides inactive modules and reveals the Prev/Next controls + progress. */
+.module-nav{display:none;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.5rem;flex-wrap:wrap}
+.module-nav .nav-spacer{flex:0 0 auto}
+.survey-progress{display:none;position:sticky;top:0;z-index:30;background:#fff;border:1px solid #e8e4dd;border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.survey-progress-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+.survey-progress-label{font-weight:700;color:#1a2a4a;font-size:.95rem;white-space:nowrap}
+.survey-progress-title{color:#3d7a3d;font-weight:600;font-size:.9rem;text-align:right}
+.survey-progress .progress-bar{margin-top:.6rem}
+
+html.js-enabled .survey-progress{display:block}
+html.js-enabled .module-nav{display:flex}
+html.js-enabled .survey-module{display:none}
+html.js-enabled .survey-module.is-active{display:block}
+/* The table of contents stays visible in JS mode and acts as quick module navigation. */
+.survey-toc-link.is-active{border-color:#3d7a3d;background:#f0f7f0;color:#3d7a3d}
+
+/* Review / summary step */
+.review-summary{margin-top:.5rem}
+.review-group{border:1px solid #ececec;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;background:#fff}
+.review-group-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.25rem}
+.review-group-head h4{margin:0;font-family:'Playfair Display',Georgia,serif;color:#1a2a4a;font-size:1.1rem}
+.review-edit{background:none;border:1px solid #d8d2c8;border-radius:6px;padding:.25rem .75rem;font-size:.8rem;color:#3d7a3d;cursor:pointer;white-space:nowrap}
+.review-edit:hover{border-color:#3d7a3d;background:#f0f7f0}
+.review-list{margin:0}
+.review-list dt{font-weight:600;color:#1a2a4a;font-size:.9rem;margin-top:.75rem}
+.review-list dd{margin:.15rem 0 0;color:#333;font-size:.95rem}
+.review-list dd ul{margin:.2rem 0;padding-left:1.1rem}
+.review-empty{color:#999;font-style:italic}
+
+/* Follow-up sub-questions render as indented continuations (no repeated number) */
+.question-followup{border-left:3px solid #e8e4dd;margin-left:.5rem}
+.followup-arrow{color:#c9a84c;font-weight:700;margin-right:.35rem}
+
+/* Clickable validation errors + question highlight */
+.error-summary a,
+.error-link{color:#b91c1c;font-weight:600;text-decoration:underline;cursor:pointer}
+.error-summary a:hover,
+.error-link:hover{color:#7f1d1d}
+.question-error-highlight{
+    border:2px solid #dc2626 !important;
+    box-shadow:0 0 0 4px rgba(220,38,38,.12) !important;
+    background:#fff7f7 !important;
+    transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
+}
+
+/* Animations */
+.fade-in{animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Validation */
+.validation-error{color:#dc2626;font-size:.85rem;margin-top:.25rem}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a2a4a;color:#fff;padding:1rem 1.25rem;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:100;font-size:.9rem;animation:fadeIn .3s ease}
+
+/* Admin */
+.admin-card{background:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.04);border:1px solid #f0f0f0}
+.stat-number{font-size:2rem;font-weight:700;color:#1a2a4a}
+.stat-label{font-size:.75rem;color:#999;text-transform:uppercase;letter-spacing:.05em}
+
+/* Responsive */
+@media(max-width:768px){
+    .section-banner{padding:1.25rem}
+    .section-banner img{height:140px}
+    .question-card{padding:1rem 1.25rem}
+    .matrix-table{display:block;overflow-x:auto}
+    .btn-primary,.btn-secondary{width:100%;justify-content:center}
+}
+@media(max-width:480px){
+    .ranking-row{flex-direction:column;align-items:flex-start;gap:.5rem}
+}
+
