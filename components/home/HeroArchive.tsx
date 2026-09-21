@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import Button from '@/components/ui/Button';
+
+export default function HeroArchive() {
+    return <section className="hero-home"><div className="hero-media" /><div className="hero-overlay" /><div className="hero-orbit orbit-one"><span>85% Africa</span></div><div className="hero-orbit orbit-two"><span>60k capacity</span></div><img className="hero-logo" src="/files/img/africarice.png" alt="AfricaRice logo" /><div className="hero-content"><p className="kicker">AfricaRice Genebank / M'Bé, Côte d'Ivoire</p><h1>A living library<br /><em>for Africa's rice.</em></h1><p className="hero-intro">We conserve the genetic diversity that makes resilient harvests possible, today and for generations to come.</p><div className="hero-actions"><Button href="#collection">Explore the collection</Button><Link className="text-button" href="/about">How we work <span>↗</span></Link></div></div><div className="hero-stamp"><strong>21,035</strong><span>accessions<br />in trust for humanity</span></div><div className="scroll-cue">Scroll to explore <span>↓</span></div><a className="hero-credit" href="https://unsplash.com/s/photos/rice-field" target="_blank" rel="noreferrer">Image: Unsplash</a></section>;
+}
