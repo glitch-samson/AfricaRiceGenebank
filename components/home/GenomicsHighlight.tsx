@@ -7,7 +7,6 @@ export default function GenomicsHighlight() {
             <div className="section-shell">
                 <div className="genomics-grid">
                     <div className="genomics-content">
-                        <span className="section-eyebrow">05 / Cutting-Edge Science</span>
                         <h2 className="section-main-heading">
                             Genomics of <em>Genebanks</em>
                         </h2>

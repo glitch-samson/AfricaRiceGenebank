@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DataBadge from '@/components/ui/DataBadge';
 
@@ -89,14 +89,34 @@ const routineOperations: OperationStep[] = [
 
 export default function OperationsLoop() {
     const [activeIdx, setActiveIdx] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
     const curr = routineOperations[activeIdx];
+    const goToPrevious = () => setActiveIdx((current) => (current === 0 ? routineOperations.length - 1 : current - 1));
+    const goToNext = () => setActiveIdx((current) => (current === routineOperations.length - 1 ? 0 : current + 1));
+
+    useEffect(() => {
+        if (isPaused) return;
+
+        const timer = window.setInterval(() => {
+            setActiveIdx((current) => (current === routineOperations.length - 1 ? 0 : current + 1));
+        }, 5000);
+
+        return () => window.clearInterval(timer);
+    }, [isPaused]);
 
     return (
-        <section className="operations-loop-section" id="routine-operations">
+        <section
+            className="operations-loop-section"
+            id="routine-operations"
+            aria-roledescription="carousel"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocusCapture={() => setIsPaused(true)}
+            onBlurCapture={() => setIsPaused(false)}
+        >
             <div className="section-shell">
                 <div className="section-header-row">
                     <div>
-                        <span className="section-eyebrow">03 / Genebank Stewardship</span>
                         <h2 className="section-main-heading">
                             The 7 Routine Operations <em>Pipeline</em>
                         </h2>
@@ -112,11 +132,14 @@ export default function OperationsLoop() {
                 </div>
 
                 {/* Horizontal Step Selector */}
-                <div className="operations-steps-bar">
+                <div className="operations-steps-bar" role="tablist" aria-label="Routine operations stages">
                     {routineOperations.map((op, idx) => (
                         <button
                             key={op.step}
                             type="button"
+                            role="tab"
+                            aria-selected={activeIdx === idx}
+                            aria-controls="operation-carousel-panel"
                             className={`op-step-btn ${activeIdx === idx ? 'is-active' : ''}`}
                             onClick={() => setActiveIdx(idx)}
                         >
@@ -127,7 +150,15 @@ export default function OperationsLoop() {
                 </div>
 
                 {/* Active Operation Detailed Showcase */}
-                <div className="operation-display-card">
+                <div className="operation-carousel-controls">
+                    <span className="operation-carousel-status">Stage {curr.step} of {routineOperations.length}</span>
+                    <div>
+                        <button type="button" className="operation-carousel-button" onClick={goToPrevious} aria-label="Previous operation">←</button>
+                        <button type="button" className="operation-carousel-button" onClick={goToNext} aria-label="Next operation">→</button>
+                    </div>
+                </div>
+
+                <div key={curr.step} className="operation-display-card" id="operation-carousel-panel" role="tabpanel" aria-live="polite" aria-label={curr.title}>
                     <div className="op-card-content">
                         <div className="op-card-badge-row">
                             <DataBadge variant="gold">Phase {curr.step} of 07</DataBadge>

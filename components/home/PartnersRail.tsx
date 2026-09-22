@@ -3,7 +3,6 @@ export default function PartnersRail() {
         <section className="partners-rail-section">
             <div className="section-shell">
                 <div className="partners-rail-header">
-                    <span className="section-eyebrow">Institutional Network</span>
                     <h3>Global Agricultural Alliances</h3>
                     <p>Securing the future of rice diversity through international multilateral cooperation.</p>
                 </div>

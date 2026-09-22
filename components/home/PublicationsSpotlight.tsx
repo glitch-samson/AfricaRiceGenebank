@@ -6,7 +6,6 @@ export default function PublicationsSpotlight() {
             <div className="section-shell">
                 <div className="section-header-row">
                     <div>
-                        <span className="section-eyebrow">06 / Peer-Reviewed Science</span>
                         <h2 className="section-main-heading">
                             Scientific <em>Literature & Publications</em>
                         </h2>

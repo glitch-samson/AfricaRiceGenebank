@@ -18,34 +18,6 @@ export default function Header() {
 
     return (
         <header className="world-site-header">
-            {/* Top Organization & Treaty Banner */}
-            <div className="treaty-topbar">
-                <div className="treaty-shell">
-                    <div className="treaty-items">
-                        <span className="treaty-item">
-                            <strong className="treaty-accent">CGIAR</strong> Research Center
-                        </span>
-                        <span className="treaty-divider" aria-hidden="true">•</span>
-                        <span className="treaty-item">
-                            Operating under the <strong>FAO Plant Treaty (ITPGRFA)</strong>
-                        </span>
-                        <span className="treaty-divider" aria-hidden="true">•</span>
-                        <span className="treaty-item">
-                            Association of <strong>28 Member Countries</strong>
-                        </span>
-                    </div>
-                    <div className="treaty-links">
-                        <Link href="/request-germplasm" className="treaty-quick-link">
-                            Order Seeds (SMTA)
-                        </Link>
-                        <span className="treaty-divider" aria-hidden="true">|</span>
-                        <Link href="/contact" className="treaty-quick-link">
-                            M'bé Station, Côte d'Ivoire
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
             {/* Main Navbar */}
             <div className="nav-shell">
                 <Link className="brand" href="/" onClick={closeNav}>

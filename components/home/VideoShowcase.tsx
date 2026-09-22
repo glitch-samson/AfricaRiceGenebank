@@ -6,7 +6,6 @@ export default function VideoShowcase() {
         <section className="genebank-video-section" id="genebank-tour">
             <div className="section-shell">
                 <div className="section-header-centered">
-                    <span className="section-eyebrow">02 / Genebank in Motion</span>
                     <h2 className="section-main-heading">
                         Inside the <em>Sanctuary</em> of African Rice
                     </h2>

@@ -6,7 +6,6 @@ export default function GlobalImpact() {
         <section className="global-impact-section">
             <div className="section-shell">
                 <div className="section-header-centered">
-                    <span className="section-eyebrow">04 / Global Public Good</span>
                     <h2 className="section-main-heading">
                         Measurable Impact <em>Across Continents</em>
                     </h2>

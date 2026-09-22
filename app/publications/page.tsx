@@ -116,7 +116,7 @@ export default function PublicationsPage() {
     });
 
     return (
-        <div className="world-page-container">
+        <div className="world-page-container publications-page">
             <div className="section-shell">
                 <Breadcrumbs items={[{ label: 'Scientific Publications' }]} />
             </div>
@@ -192,43 +192,72 @@ export default function PublicationsPage() {
                 </div>
             </section>
 
+            <section className="publication-feature-section">
+                <div className="section-shell">
+                    <div className="publication-feature">
+                        <div className="publication-feature-cover">
+                            <img src={publicationsData[0].image} alt="Cover of the flagship genomics monograph" />
+                            <span>Featured publication</span>
+                        </div>
+                        <div className="publication-feature-copy">
+                            <span className="section-eyebrow">Research desk / 01</span>
+                            <h2>{publicationsData[0].title}</h2>
+                            <p className="publication-feature-authors">{publicationsData[0].authors} <span>·</span> {publicationsData[0].year}</p>
+                            <p>{publicationsData[0].abstract}</p>
+                            <div className="publication-feature-actions">
+                                <a href={publicationsData[0].doiUrl} target="_blank" rel="noreferrer" className="btn-primary-dark">
+                                    Read the featured work ↗
+                                </a>
+                                <span className="publication-doi-label">DOI {publicationsData[0].doi}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Interactive Publications Filter & Library */}
             <section className="reading-content-section">
                 <div className="section-shell">
                     {/* Search & Filter Toolbar */}
                     <div className="publications-toolbar">
-                        <div className="pub-filter-tabs">
+                        <div className="publication-library-heading">
+                            <span className="section-eyebrow">Research library</span>
+                            <h2>Browse the evidence base</h2>
+                            <p>{filtered.length} of {publicationsData.length} publications shown</p>
+                        </div>
+                        <div className="pub-filter-tabs" role="tablist" aria-label="Publication categories">
                             <button
                                 type="button"
                                 className={`pub-tab-btn ${filter === 'all' ? 'is-active' : ''}`}
                                 onClick={() => setFilter('all')}
                             >
-                                All Publications ({publicationsData.length})
+                                All <span>{publicationsData.length}</span>
                             </button>
                             <button
                                 type="button"
                                 className={`pub-tab-btn ${filter === 'book' ? 'is-active' : ''}`}
                                 onClick={() => setFilter('book')}
                             >
-                                Books & Monographs
+                                Books <span>{publicationsData.filter((pub) => pub.category === 'book').length}</span>
                             </button>
                             <button
                                 type="button"
                                 className={`pub-tab-btn ${filter === 'journal' ? 'is-active' : ''}`}
                                 onClick={() => setFilter('journal')}
                             >
-                                Peer-Reviewed Journals
+                                Journals <span>{publicationsData.filter((pub) => pub.category === 'journal').length}</span>
                             </button>
                             <button
                                 type="button"
                                 className={`pub-tab-btn ${filter === 'guideline' ? 'is-active' : ''}`}
                                 onClick={() => setFilter('guideline')}
                             >
-                                Technical Guidelines
+                                Guidelines <span>{publicationsData.filter((pub) => pub.category === 'guideline').length}</span>
                             </button>
                         </div>
 
-                        <div className="pub-search-box">
+                        <label className="pub-search-box">
+                            <span>Search the library</span>
                             <input
                                 type="text"
                                 placeholder="Search by title, author, or keyword..."
@@ -237,7 +266,7 @@ export default function PublicationsPage() {
                                 className="search-input"
                                 aria-label="Search publications"
                             />
-                        </div>
+                        </label>
                     </div>
 
                     {/* Publications Cards Grid */}
@@ -271,6 +300,13 @@ export default function PublicationsPage() {
                                 </div>
                             </article>
                         ))}
+                        {filtered.length === 0 && (
+                            <div className="publication-empty-state">
+                                <span className="section-eyebrow">No matching records</span>
+                                <h3>Try a broader search.</h3>
+                                <p>Search by a title, author, journal, or research keyword.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>

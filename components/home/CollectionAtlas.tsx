@@ -131,7 +131,6 @@ export default function CollectionAtlas() {
             <div className="section-shell">
                 <div className="section-header-row">
                     <div>
-                        <span className="section-eyebrow">01 / Biological Repository</span>
                         <h2 className="section-main-heading">
                             The Living Collection <em>Atlas</em>
                         </h2>
