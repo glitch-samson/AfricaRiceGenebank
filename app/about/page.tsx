@@ -2,6 +2,7 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import DataBadge from '@/components/ui/DataBadge';
 import VideoPlayer from '@/components/ui/VideoPlayer';
 import InteractiveAccordion from '@/components/ui/InteractiveAccordion';
+import TeamCarousel from '@/components/pages/TeamCarousel';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -112,46 +113,43 @@ export default function AboutPage() {
             {/* Historical Milestone & Dr. Monty Jones Tribute */}
             <section className="history-tribute-section" id="inauguration">
                 <div className="section-shell">
-                    <div className="two-col-grid align-center">
-                        <div className="tribute-content">
-                            <span className="section-eyebrow">Legacy & Dedication</span>
-                            <h2 className="section-main-heading">
-                                Honoring <em>Dr. Monty P. Jones</em>
-                            </h2>
+                    <div className="tribute-header">
+                        <span className="section-eyebrow">Legacy & Dedication</span>
+                        <p>Honoring the scientist whose work made a new generation of African rice possible.</p>
+                    </div>
+                    <div className="tribute-feature">
+                        <div className="tribute-feature-copy">
+                            <span className="tribute-feature-mark">1951 — 2024</span>
+                            <h2>Honoring <em>Dr. Monty P. Jones</em></h2>
                             <p className="editorial-lead">
-                                The center proudly bears the name of Dr. Monty Patrick Jones (1951–2024), the distinguished Sierra Leonean plant scientist and 2004 World Food Prize Laureate who pioneered NERICA (New Rice for Africa).
+                                The center bears the name of the distinguished Sierra Leonean plant scientist and 2004 World Food Prize Laureate who pioneered NERICA, New Rice for Africa.
                             </p>
                             <p>
-                                Dr. Jones broke the evolutionary sterility barrier between African rice (<em>Oryza glaberrima</em>) and Asian rice (<em>Oryza sativa</em>) through anther culture and embryo rescue, unlocking high-yielding, drought-tolerant varieties that lifted millions of West African farming families out of poverty.
-                            </p>
-                            <p>
-                                The RBCA stands as the permanent living continuation of his vision: conserving the ancestral genetic variation of African rice to empower future generations of agricultural scientists.
+                                Through anther culture and embryo rescue, Dr. Jones helped overcome the sterility barrier between African rice (<em>Oryza glaberrima</em>) and Asian rice (<em>Oryza sativa</em>). His work connected resilience, yield, and farmer opportunity.
                             </p>
                             <div className="tribute-quote-card">
-                                <p>“Africa's agricultural transformation must begin with the genetic heritage that evolved in our own soils.”</p>
-                                <span>— Dr. Monty P. Jones (1951–2024)</span>
+                                <p>“Africa&apos;s agricultural transformation must begin with the genetic heritage that evolved in our own soils.”</p>
+                                <span>Dr. Monty P. Jones</span>
                             </div>
                         </div>
-
-                        <div className="inauguration-card">
-                            <img
-                                src="/files/img/about/inauguration/slide1.jpg"
-                                alt="Official Inauguration Ceremony at M'bé, 21 February 2020"
-                                className="inauguration-img"
-                            />
-                            <div className="inauguration-meta-box">
-                                <h4>Official Center Inauguration</h4>
-                                <p>
-                                    <strong>Date:</strong> 21 February 2020<br />
-                                    <strong>Location:</strong> AfricaRice Research Station, M'bé near Bouaké, Côte d'Ivoire<br />
-                                    <strong>Leadership:</strong> Presided by Dr. Abdallah Toikeusse Mabri (Minister of Higher Education and Scientific Research) and Mr. Gaoussou Touré (Minister for the Promotion of Rice), alongside AfricaRice Board members, traditional chiefs, and international partners.
-                                </p>
-                                <div className="partner-tags-mini">
-                                    <span>African Development Bank</span>
-                                    <span>CGIAR Platform</span>
-                                    <span>Crop Trust</span>
-                                </div>
-                            </div>
+                        <div className="tribute-feature-media">
+                            <img src="/files/img/about/inauguration/slide1.jpg" alt="Official inauguration of the Dr. Monty P. Jones Rice Biodiversity Center for Africa" />
+                            <div className="tribute-image-caption">A living continuation of a scientific legacy</div>
+                        </div>
+                    </div>
+                    <div className="tribute-record">
+                        <div className="tribute-record-image">
+                            <img src="/files/img/about/inauguration/slide2.jpg" alt="Guests and partners at the RBCA inauguration ceremony" />
+                        </div>
+                        <div className="tribute-record-copy">
+                            <span className="record-kicker">A center named in service</span>
+                            <h3>From breakthrough to institution</h3>
+                            <p>RBCA carries Dr. Jones&apos;s vision forward by conserving the ancestral variation that future breeders and researchers will need.</p>
+                            <dl>
+                                <div><dt>Inaugurated</dt><dd>21 February 2020</dd></div>
+                                <div><dt>Location</dt><dd>M&apos;bé, Bouaké, Côte d&apos;Ivoire</dd></div>
+                                <div><dt>Focus</dt><dd>Rice diversity in trust for humanity</dd></div>
+                            </dl>
                         </div>
                     </div>
                 </div>
@@ -160,59 +158,7 @@ export default function AboutPage() {
             {/* Genebank Leadership & Scientific Personnel */}
             <section className="leadership-section" id="governance">
                 <div className="section-shell">
-                    <div className="section-header-centered">
-                        <span className="section-eyebrow">Scientific Leadership</span>
-                        <h2 className="section-main-heading">
-                            Custodians of <em>Genetic Heritage</em>
-                        </h2>
-                        <p className="section-subtext">
-                            Our team of molecular geneticists, agronomists, seed physiologists, and bioinformaticians ensure every seed is managed with uncompromising scientific rigor.
-                        </p>
-                    </div>
-
-                    <div className="team-grid">
-                        <div className="team-card">
-                            <div className="team-avatar-ph">👩‍🔬</div>
-                            <div className="team-card-info">
-                                <h3>Dr. Marie-Noelle Ndjiondjop</h3>
-                                <span className="team-title">Head of Genetic Resources Unit • Manager, RBCA</span>
-                                <p>
-                                    Senior molecular biologist leading genebank operations, high-throughput DArTseq genomics, and international safety duplication under the FAO Plant Treaty. Author of the flagship monograph on genomics in genebank conservation.
-                                </p>
-                                <div className="team-contact-link">
-                                    <span>Email:</span> <a href="mailto:m.ndjiondjop@cgiar.org">m.ndjiondjop@cgiar.org</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="team-card">
-                            <div className="team-avatar-ph">👨‍💻</div>
-                            <div className="team-card-info">
-                                <h3>Clinton Obinna Ogwuike</h3>
-                                <span className="team-title">Information & Database Manager</span>
-                                <p>
-                                    Oversees the GRIN-Global Community Edition (GGCE) database deployment, Genesys CIV033 portal synchronization, and digital object identifier (DOI) integration for traceable accession metadata.
-                                </p>
-                                <div className="team-contact-link">
-                                    <span>Focus:</span> Bio-informatics & GRIN-Global
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="team-card">
-                            <div className="team-avatar-ph">🌾</div>
-                            <div className="team-card-info">
-                                <h3>Dr. Arnaud Comlan Gouda</h3>
-                                <span className="team-title">Seed Health & Germplasm Regeneration Specialist</span>
-                                <p>
-                                    Leads field multiplication cycles at M'bé station, seed viability surveillance, phytosanitary quarantine clearance, and molecular purity quality control.
-                                </p>
-                                <div className="team-contact-link">
-                                    <span>Focus:</span> Seed Physiology & QC
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <TeamCarousel />
                 </div>
             </section>
 

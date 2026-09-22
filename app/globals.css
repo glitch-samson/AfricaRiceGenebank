@@ -3528,6 +3528,543 @@ select {
   font-size: 1rem;
 }
 
+/* Dr. Monty P. Jones legacy feature */
+.history-tribute-section {
+  background: #eef3ed;
+  padding: 112px 0 120px;
+}
+
+.tribute-header {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 34px;
+}
+
+.tribute-header > p {
+  color: var(--c-slate-600);
+  font-size: 0.95rem;
+  margin: 0;
+  max-width: 340px;
+}
+
+.tribute-feature {
+  background: var(--c-forest-dark);
+  color: #fff;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+  min-height: 590px;
+  overflow: hidden;
+}
+
+.tribute-feature-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 70px clamp(30px, 6vw, 90px);
+}
+
+.tribute-feature-mark,
+.record-kicker {
+  color: #b9d77e;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tribute-feature-copy h2 {
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 5.4vw, 78px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+  margin: 18px 0 26px;
+  max-width: 620px;
+}
+
+.tribute-feature-copy h2 em {
+  color: #d8f27a;
+  display: block;
+  font-style: italic;
+}
+
+.tribute-feature-copy p {
+  color: #c6d6cc;
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 0 0 18px;
+  max-width: 630px;
+}
+
+.tribute-feature-copy .editorial-lead {
+  color: #f0f7f1;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.tribute-quote-card {
+  border-left: 2px solid #d8f27a;
+  margin-top: 18px;
+  padding: 7px 0 7px 20px;
+}
+
+.tribute-quote-card p {
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+
+.tribute-quote-card span {
+  color: #a9c3b2;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.tribute-feature-media {
+  min-height: 590px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tribute-feature-media::after {
+  background: linear-gradient(180deg, transparent 45%, rgba(7, 23, 17, 0.86));
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.tribute-feature-media img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+  width: 100%;
+}
+
+.tribute-feature:hover .tribute-feature-media img {
+  transform: scale(1.035);
+}
+
+.tribute-image-caption {
+  bottom: 28px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  left: 28px;
+  letter-spacing: 0.04em;
+  position: absolute;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.tribute-record {
+  background: #fff;
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  margin-left: 9%;
+  max-width: 920px;
+  position: relative;
+  z-index: 2;
+}
+
+.tribute-record-image {
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.tribute-record-image img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.tribute-record-copy {
+  padding: 34px 40px;
+}
+
+.tribute-record-copy h3 {
+  color: var(--c-forest);
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 12px 0 14px;
+}
+
+.tribute-record-copy > p {
+  color: var(--c-slate-600);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 540px;
+}
+
+.tribute-record-copy dl {
+  border-top: 1px solid var(--c-slate-200);
+  display: grid;
+  gap: 9px;
+  margin: 24px 0 0;
+  padding-top: 18px;
+}
+
+.tribute-record-copy dl div {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 100px 1fr;
+}
+
+.tribute-record-copy dt {
+  color: var(--c-moss);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.tribute-record-copy dd {
+  color: var(--c-slate-700);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .history-tribute-section {
+    padding: 76px 0 84px;
+  }
+
+  .tribute-header {
+    align-items: start;
+    display: block;
+  }
+
+  .tribute-header > p {
+    margin-top: 16px;
+  }
+
+  .tribute-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .tribute-feature-media {
+    min-height: 360px;
+    order: -1;
+  }
+
+  .tribute-feature-copy {
+    padding: 48px 26px 54px;
+  }
+
+  .tribute-record {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+  }
+
+  .tribute-record-image {
+    min-height: 210px;
+  }
+
+  .tribute-record-copy {
+    padding: 30px 26px 36px;
+  }
+}
+
+/* Scientific leadership profile carousel */
+.leadership-section {
+  background: #fefcf8;
+  color: #111418;
+  overflow: hidden;
+  padding: 96px 0 108px;
+}
+
+.team-feature {
+  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(280px, 430px) minmax(0, 1fr);
+  min-height: 640px;
+  position: relative;
+}
+
+.team-feature-intro {
+  position: relative;
+  z-index: 45;
+}
+
+.team-feature-intro h2 {
+  color: #111418;
+  font-family: var(--font-sans);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin: 10px 0 22px;
+}
+
+.team-feature-intro h2 em {
+  color: #111418;
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+.team-feature-intro > p {
+  color: #4e5255;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 429px;
+}
+
+.team-carousel {
+  display: contents;
+}
+
+.team-feature-copy {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 32px;
+  max-width: 360px;
+}
+
+.team-feature-label,
+.team-feature-controls {
+  color: #4e5255;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.team-feature-controls {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.team-slider-button {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #eab819;
+  border-radius: 50%;
+  color: #eab819;
+  cursor: pointer;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  width: 40px;
+}
+
+.team-slider-button:hover,
+.team-slider-button:focus-visible {
+  background: #eab819;
+  color: #fff;
+  outline: 2px solid #eab819;
+  outline-offset: 3px;
+  transform: scale(1.04);
+}
+
+.team-feature-desktop {
+  align-items: center;
+  display: flex;
+  gap: 0;
+  min-height: 560px;
+  position: relative;
+}
+
+.team-feature-images {
+  height: 560px;
+  margin-left: auto;
+  position: relative;
+  width: 790px;
+}
+
+.team-stack-image {
+  background: #242424;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-stack-image img {
+  object-fit: cover;
+}
+
+.team-image-following,
+.team-image-next,
+.team-image-active {
+  position: absolute;
+  box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+.team-image-following {
+  height: 448px;
+  left: 390px;
+  opacity: 0.36;
+  top: 56px;
+  width: 425px;
+  z-index: 10;
+}
+
+.team-image-next {
+  height: 510px;
+  left: 360px;
+  opacity: 0.58;
+  top: 25px;
+  width: 425px;
+  z-index: 20;
+}
+
+.team-image-active {
+  height: 560px;
+  left: 330px;
+  top: 0;
+  width: 425px;
+  z-index: 30;
+}
+
+.team-profile-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: var(--c-slate-900);
+  left: 124px;
+  padding: 30px;
+  position: absolute;
+  top: 108px;
+  width: 356px;
+  z-index: 40;
+}
+
+.team-profile-kicker {
+  color: #eab819;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.team-profile-card h3 {
+  color: #111418;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 22px 0 8px;
+}
+
+.team-profile-title {
+  color: #4e5255;
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.team-profile-card p {
+  color: #4e5255;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  margin: 18px 0 22px;
+}
+
+.team-profile-contact {
+  align-items: center;
+  border-top: 1px solid #e5e7eb;
+  color: #4e5255;
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  gap: 7px;
+  padding-top: 14px;
+}
+
+.team-profile-contact svg {
+  color: #eab819;
+  flex: 0 0 auto;
+}
+
+.team-feature-mobile {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-feature * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .leadership-section {
+    padding: 72px 0 84px;
+  }
+
+  .team-feature {
+    display: block;
+    min-height: 0;
+  }
+
+  .team-feature-copy {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .team-feature-desktop {
+    display: none;
+  }
+
+  .team-feature-mobile {
+    display: block;
+    min-height: 560px;
+    position: relative;
+  }
+
+  .team-mobile-images {
+    height: 330px;
+    margin-left: auto;
+    position: relative;
+    width: 100%;
+  }
+
+  .team-mobile-images .team-image-following {
+    height: 270px;
+    left: auto;
+    right: -16px;
+    top: 48px;
+    width: 214px;
+  }
+
+  .team-mobile-images .team-image-next {
+    height: 300px;
+    left: auto;
+    right: 0;
+    top: 28px;
+    width: 230px;
+  }
+
+  .team-mobile-images .team-image-active {
+    height: 330px;
+    left: auto;
+    right: 16px;
+    top: 0;
+    width: 250px;
+  }
+
+  .team-feature-mobile .team-profile-card {
+    left: 0;
+    padding: 25px;
+    top: 180px;
+    transform-origin: top left !important;
+    width: min(356px, calc(100% - 26px));
+  }
+}
+
 /* Operations carousel controls */
 .operations-carousel-controls {
   align-items: center;
