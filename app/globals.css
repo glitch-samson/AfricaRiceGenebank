@@ -2068,6 +2068,48 @@ body {
 @media (max-width: 1100px) { .admin-module-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 760px) { .admin-app { display: block; } .admin-sidebar { padding: 14px 16px; } .admin-brand { padding-bottom: 14px; } .admin-nav { flex-direction: row; flex-wrap: wrap; gap: 2px; padding-top: 12px; } .admin-nav-label, .admin-sidebar-footer { display: none; } .admin-nav a { padding: 8px; font-size: 11px; } .admin-nav a.is-disabled { display: none; } .admin-main { padding: 26px 18px 40px; } .admin-topbar, .admin-welcome, .admin-next { align-items: start; flex-direction: column; } .admin-welcome { padding: 24px; } .admin-module-grid { grid-template-columns: 1fr; } }
 
+/* Motion system: scroll reveals, entrance choreography, and tactile interaction states. */
+[data-reveal], [data-stagger-parent] > *, main:not(.admin-app) section, .facts-strip-grid > *, .workflow-steps-quad > *, .survey-choice-card, .admin-module-card { --motion-delay: calc(var(--stagger-index, 0) * 70ms); animation-delay: var(--motion-delay); }
+[data-reveal], [data-stagger-parent] > *, main:not(.admin-app) section, .facts-strip-grid > *, .workflow-steps-quad > *, .survey-choice-card, .admin-module-card { opacity: 0; animation-play-state: paused; }
+[data-reveal].is-visible, [data-stagger-parent] > *.is-visible, main:not(.admin-app) section.is-visible, .facts-strip-grid > *.is-visible, .workflow-steps-quad > *.is-visible, .survey-choice-card.is-visible, .admin-module-card.is-visible { animation-play-state: running; opacity: 1; }
+[data-stagger-index="0"] { --stagger-index: 0; } [data-stagger-index="1"] { --stagger-index: 1; } [data-stagger-index="2"] { --stagger-index: 2; } [data-stagger-index="3"] { --stagger-index: 3; } [data-stagger-index="4"] { --stagger-index: 4; } [data-stagger-index="5"] { --stagger-index: 5; } [data-stagger-index="6"] { --stagger-index: 6; } [data-stagger-index="7"] { --stagger-index: 7; }
+[data-motion="motion-rise"], .motion-rise { animation: motion-rise 780ms cubic-bezier(.2,.8,.2,1) both paused; }
+[data-motion="motion-slide-left"], .motion-slide-left { animation: motion-slide-left 760ms cubic-bezier(.2,.8,.2,1) both paused; }
+[data-motion="motion-slide-right"], .motion-slide-right { animation: motion-slide-right 760ms cubic-bezier(.2,.8,.2,1) both paused; }
+[data-motion="motion-scale"], .motion-scale { animation: motion-scale 700ms cubic-bezier(.2,.9,.3,1.2) both paused; }
+[data-motion="motion-blur"], .motion-blur { animation: motion-blur 900ms ease-out both paused; }
+[data-motion="motion-flip"], .motion-flip { animation: motion-flip 850ms cubic-bezier(.2,.8,.2,1) both paused; transform-origin: 50% 0; }
+[data-motion="motion-rotate"], .motion-rotate { animation: motion-rotate 850ms cubic-bezier(.2,.8,.2,1) both paused; }
+[data-motion="motion-clip"], .motion-clip { animation: motion-clip 900ms cubic-bezier(.77,0,.18,1) both paused; }
+[data-motion="motion-wipe"], .motion-wipe { animation: motion-wipe 850ms cubic-bezier(.77,0,.18,1) both paused; }
+[data-motion="motion-bounce"], .motion-bounce { animation: motion-bounce 900ms cubic-bezier(.2,1.4,.4,1) both paused; }
+[data-motion="motion-elastic"], .motion-elastic { animation: motion-elastic 1100ms cubic-bezier(.2,1.6,.4,1) both paused; }
+[data-motion="motion-drift"], .motion-drift { animation: motion-drift 1000ms ease-out both paused; }
+.motion-fade { animation: motion-fade 700ms ease-out both; } .motion-float { animation: motion-float 4s ease-in-out infinite; } .motion-pulse { animation: motion-pulse 2.8s ease-in-out infinite; } .motion-shimmer { animation: motion-shimmer 2.5s linear infinite; } .motion-glow { animation: motion-glow 2.8s ease-in-out infinite; } .motion-sway { animation: motion-sway 5s ease-in-out infinite; } .motion-breathe { animation: motion-breathe 4s ease-in-out infinite; } .motion-orbit { animation: motion-orbit 8s linear infinite; } .motion-ticker { animation: motion-ticker 18s linear infinite; } .motion-progress { animation: motion-progress 1.4s ease-out both; } .motion-underline { position: relative; } .motion-underline::after { content: ''; display: block; height: 2px; width: 0; background: currentColor; transition: width 450ms ease; } .motion-underline:hover::after { width: 100%; } .motion-lift { transition: transform 260ms ease, box-shadow 260ms ease; } .motion-lift:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); } .motion-tilt { transition: transform 260ms ease; } .motion-tilt:hover { transform: perspective(700px) rotateX(2deg) rotateY(-2deg) translateY(-3px); } .motion-press { transition: transform 120ms ease; } .motion-press:active { transform: scale(.97); } .motion-reveal-line { background: linear-gradient(90deg, currentColor 50%, transparent 50%) 100% 100% / 200% 2px no-repeat; transition: background-position 600ms ease; } .motion-reveal-line:hover { background-position: 0 100%; }
+@keyframes motion-rise { from { opacity: 0; transform: translateY(42px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes motion-slide-left { from { opacity: 0; transform: translateX(-54px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes motion-slide-right { from { opacity: 0; transform: translateX(54px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes motion-scale { from { opacity: 0; transform: scale(.82); } to { opacity: 1; transform: scale(1); } }
+@keyframes motion-blur { from { opacity: 0; filter: blur(16px); transform: scale(1.04); } to { opacity: 1; filter: blur(0); transform: scale(1); } }
+@keyframes motion-flip { from { opacity: 0; transform: perspective(900px) rotateX(-70deg); } to { opacity: 1; transform: perspective(900px) rotateX(0); } }
+@keyframes motion-rotate { from { opacity: 0; transform: rotate(-8deg) scale(.92); } to { opacity: 1; transform: rotate(0) scale(1); } }
+@keyframes motion-clip { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes motion-wipe { from { opacity: 0; clip-path: inset(100% 0 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes motion-bounce { 0% { opacity: 0; transform: translateY(34px); } 55% { opacity: 1; transform: translateY(-9px); } 78% { transform: translateY(4px); } 100% { transform: translateY(0); } }
+@keyframes motion-elastic { 0% { opacity: 0; transform: scaleX(.55); } 55% { opacity: 1; transform: scaleX(1.08); } 78% { transform: scaleX(.97); } 100% { transform: scaleX(1); } }
+@keyframes motion-drift { from { opacity: 0; transform: translate3d(22px,22px,0) rotate(2deg); } to { opacity: 1; transform: translate3d(0,0,0) rotate(0); } }
+@keyframes motion-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes motion-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes motion-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .72; transform: scale(1.03); } }
+@keyframes motion-shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+@keyframes motion-glow { 0%,100% { box-shadow: 0 0 0 rgba(198,146,52,0); } 50% { box-shadow: 0 0 28px rgba(198,146,52,.28); } }
+@keyframes motion-sway { 0%,100% { transform: rotate(0); } 25% { transform: rotate(1.5deg); } 75% { transform: rotate(-1.5deg); } }
+@keyframes motion-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+@keyframes motion-orbit { from { transform: rotate(0) translateX(5px) rotate(0); } to { transform: rotate(360deg) translateX(5px) rotate(-360deg); } }
+@keyframes motion-ticker { from { transform: translateX(0); } to { transform: translateX(-35%); } }
+@keyframes motion-progress { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 1ms !important; } [data-reveal], [data-stagger-parent] > *, main:not(.admin-app) section, .facts-strip-grid > *, .workflow-steps-quad > *, .survey-choice-card, .admin-module-card { opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important; } }
+
 .partner-badge-item img {
   height: 32px;
   filter: brightness(0) invert(1);
