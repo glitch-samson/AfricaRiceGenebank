@@ -212,6 +212,10 @@ export default function Header() {
                         Publications
                     </Link>
 
+                    <Link className="nav-link" href="/survey" onClick={closeNav}>
+                        Survey
+                    </Link>
+
                     <Link className="nav-cta-btn" href="/request-germplasm" onClick={closeNav}>
                         <span>Request Germplasm</span>
                         <span className="arrow-icon">↗</span>
