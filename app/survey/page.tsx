@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import DataBadge from '@/components/ui/DataBadge';
 import { allSurveyQuestions, surveySections, SurveyQuestion } from '@/lib/survey';
@@ -8,6 +8,24 @@ import { allSurveyQuestions, surveySections, SurveyQuestion } from '@/lib/survey
 type Answers = Record<string, string | string[] | Record<string, string>>;
 
 type SurveyType = 'molecular' | 'feedback' | 'nars';
+type PublishedSurvey = { id: number; slug: string; title: string; description: string | null; questions: SurveyQuestion[] };
+const supportedQuestionTypes = new Set(['text', 'email', 'textarea', 'select', 'multi', 'matrix', 'rank']);
+
+function normalizePublishedSurveys(value: unknown): PublishedSurvey[] {
+    if (!Array.isArray(value)) return [];
+    return value.flatMap((survey) => {
+        if (!survey || typeof survey !== 'object') return [];
+        const item = survey as { id?: number; slug?: string; title?: string; description?: string | null; questions?: unknown };
+        if (typeof item.id !== 'number' || !item.slug || !item.title) return [];
+        const questions = Array.isArray(item.questions) ? item.questions.flatMap((question, index) => {
+            if (!question || typeof question !== 'object') return [];
+            const itemQuestion = question as Partial<SurveyQuestion>;
+            if (!itemQuestion.id || !itemQuestion.label) return [];
+            return [{ id: itemQuestion.id, number: itemQuestion.number || `Q${index + 1}`, label: itemQuestion.label, type: supportedQuestionTypes.has(itemQuestion.type || '') ? itemQuestion.type : 'text', options: Array.isArray(itemQuestion.options) ? itemQuestion.options.filter((option): option is string => typeof option === 'string') : [] }];
+        }) : [];
+        return [{ id: item.id, slug: item.slug, title: item.title, description: item.description || null, questions }];
+    });
+}
 
 const surveyCatalog: Array<{ type: SurveyType; eyebrow: string; title: string; description: string; time: string; questions: string; accent: string }> = [
     { type: 'molecular', eyebrow: 'CGIAR Genebank Accelerator', title: 'Molecular Characterisation', description: 'Map your genebank capacity, sequencing experience, infrastructure, data practice, and appetite for collaborative DSI generation.', time: '15–20 min', questions: '54 questions', accent: 'gold' },
@@ -73,11 +91,32 @@ function ShortSurvey({ type, onBack }: { type: 'feedback' | 'nars'; onBack: () =
     return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><div className="survey-form-heading"><span className={`survey-icon ${catalog.accent}`}>{type === 'feedback' ? '↗' : '⌁'}</span><div><span className="section-eyebrow">{catalog.eyebrow}</span><h2>{catalog.title}</h2><p>{catalog.time} · {catalog.questions}</p></div></div><form onSubmit={submit} className="survey-form-inner short-survey-form">{questions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between"><button type="button" className="btn-secondary-outline" onClick={onBack}>Back</button><button type="submit" className="btn-primary-dark">Submit response ↗</button></div></form></div>;
 }
 
+function DynamicSurvey({ survey, onBack }: { survey: PublishedSurvey; onBack: () => void }) {
+    const [answers, setAnswersState] = useState<Answers>({});
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState(false);
+    const setAnswer = (id: string, value: Answers[string]) => setAnswersState((current) => ({ ...current, [id]: value }));
+    const submit = async (event: FormEvent) => {
+        event.preventDefault();
+        setError(false);
+        const response = await fetch('/api/survey/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ surveySlug: survey.slug, answers }) });
+        if (response.ok) setSubmitted(true);
+        else setError(true);
+    };
+    if (submitted) return <div className="survey-container-box survey-complete"><span className="survey-complete-mark">✓</span><h2>Thank you for sharing your response.</h2><p>Your answers have been recorded and will help guide AfricaRice Genebank work.</p><button className="btn-primary-dark" onClick={onBack}>Explore another survey</button></div>;
+    if (survey.questions.length === 0) return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><h2>{survey.title}</h2><p>This survey is published but has no questions yet. Please check back soon.</p></div>;
+    return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><div className="survey-form-heading"><span className="survey-icon blue">⌁</span><div><span className="section-eyebrow">AfricaRice Genebank</span><h2>{survey.title}</h2><p>{survey.questions.length} questions</p></div></div><form onSubmit={submit} className="survey-form-inner short-survey-form">{survey.questions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between"><button type="button" className="btn-secondary-outline" onClick={onBack}>Back</button><button type="submit" className="btn-primary-dark">Submit response ↗</button></div>{error && <p role="alert" className="survey-error">We could not save your response. Please check the required email field and try again.</p>}</form></div>;
+}
+
 export default function SurveyPage() {
-    const [selectedSurvey, setSelectedSurvey] = useState<SurveyType | null>(null);
+    const [selectedSurvey, setSelectedSurvey] = useState<string | null>(null);
+    const [publishedSurveys, setPublishedSurveys] = useState<PublishedSurvey[]>([]);
     const [section, setSection] = useState(0);
     const [answers, setAnswersState] = useState<Answers>({});
     const [status, setStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+    useEffect(() => {
+        fetch('/api/surveys', { cache: 'no-store' }).then((response) => response.ok ? response.json() : { surveys: [] }).then((result) => setPublishedSurveys(normalizePublishedSurveys(result.surveys))).catch(() => setPublishedSurveys([]));
+    }, []);
     const current = surveySections[section];
     const visibleQuestions = useMemo(() => current.questions.filter((question) => {
         if (!question.conditional) return true;
@@ -104,9 +143,12 @@ export default function SurveyPage() {
         setStatus(response.ok ? 'success' : 'error');
     };
 
-    if (!selectedSurvey) return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }]} /></div><section className="survey-hub-hero"><div className="section-shell"><span className="section-eyebrow">AfricaRice Genebank · Have your say</span><h1>Choose the survey that fits <em>your work.</em></h1><p>Every response helps us make rice diversity more useful, more accessible, and better protected for the next generation.</p><div className="survey-hub-signals"><span><strong>3</strong> survey paths</span><span><strong>1</strong> shared purpose</span><span><strong>100%</strong> practical impact</span></div></div></section><section className="reading-content-section"><div className="section-shell"><div className="survey-catalog">{surveyCatalog.map((survey, index) => <button className={`survey-choice-card ${survey.accent}`} key={survey.type} onClick={() => { setSelectedSurvey(survey.type); setSection(0); }}><span className="survey-card-number">0{index + 1}</span><span className={`survey-icon ${survey.accent}`}>{survey.type === 'molecular' ? '⌬' : survey.type === 'feedback' ? '↗' : '⌁'}</span><span className="section-eyebrow">{survey.eyebrow}</span><h2>{survey.title}</h2><p>{survey.description}</p><span className="survey-card-meta"><b>{survey.time}</b><span>{survey.questions}</span><strong>Start survey →</strong></span></button>)}</div><div className="survey-hub-note"><span>Not sure where to begin?</span> Choose Molecular Characterisation if you manage or support a genebank; choose User Feedback if you have requested AfricaRice germplasm; choose NARS Evaluation if you are exploring stress screening or conservation partnerships.</div></div></section></div>;
+    if (!selectedSurvey) return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }]} /></div><section className="survey-hub-hero"><div className="section-shell"><span className="section-eyebrow">AfricaRice Genebank · Have your say</span><h1>Choose the survey that fits <em>your work.</em></h1><p>Every response helps us make rice diversity more useful, more accessible, and better protected for the next generation.</p><div className="survey-hub-signals"><span><strong>{surveyCatalog.length + publishedSurveys.length}</strong> survey paths</span><span><strong>1</strong> shared purpose</span><span><strong>100%</strong> practical impact</span></div></div></section><section className="reading-content-section"><div className="section-shell"><div className="survey-catalog">{surveyCatalog.map((survey, index) => <button className={`survey-choice-card ${survey.accent}`} key={survey.type} onClick={() => { setSelectedSurvey(survey.type); setSection(0); }}><span className="survey-card-number">0{index + 1}</span><span className={`survey-icon ${survey.accent}`}>{survey.type === 'molecular' ? '⌬' : survey.type === 'feedback' ? '↗' : '⌁'}</span><span className="section-eyebrow">{survey.eyebrow}</span><h2>{survey.title}</h2><p>{survey.description}</p><span className="survey-card-meta"><b>{survey.time}</b><span>{survey.questions}</span><strong>Start survey →</strong></span></button>)}{publishedSurveys.filter((survey) => !surveyCatalog.some((item) => item.type === survey.slug)).map((survey, index) => <button className="survey-choice-card blue" key={survey.slug} onClick={() => { setSelectedSurvey(survey.slug); setSection(0); }}><span className="survey-card-number">0{surveyCatalog.length + index + 1}</span><span className="survey-icon blue">⌁</span><span className="section-eyebrow">AfricaRice Genebank</span><h2>{survey.title}</h2><p>{survey.description || 'Share your experience and help shape future genebank work.'}</p><span className="survey-card-meta"><b>Online survey</b><span>{survey.questions.length} questions</span><strong>Start survey →</strong></span></button>)}</div><div className="survey-hub-note"><span>Not sure where to begin?</span> Choose Molecular Characterisation if you manage or support a genebank; choose User Feedback if you have requested AfricaRice germplasm; choose NARS Evaluation if you are exploring stress screening or conservation partnerships.</div></div></section></div>;
 
-    if (selectedSurvey !== 'molecular') return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }, { label: surveyCatalog.find((survey) => survey.type === selectedSurvey)?.title || '' }]} /></div><section className="reading-content-section survey-flow-section"><div className="section-shell"><ShortSurvey type={selectedSurvey} onBack={() => setSelectedSurvey(null)} /></div></section></div>;
+    const dynamicSurvey = publishedSurveys.find((survey) => survey.slug === selectedSurvey);
+    if (dynamicSurvey) return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }, { label: dynamicSurvey.title }]} /></div><section className="reading-content-section survey-flow-section"><div className="section-shell"><DynamicSurvey survey={dynamicSurvey} onBack={() => setSelectedSurvey(null)} /></div></section></div>;
+
+    if (selectedSurvey !== 'molecular') return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }, { label: surveyCatalog.find((survey) => survey.type === selectedSurvey)?.title || '' }]} /></div><section className="reading-content-section survey-flow-section"><div className="section-shell"><ShortSurvey type={selectedSurvey as 'feedback' | 'nars'} onBack={() => setSelectedSurvey(null)} /></div></section></div>;
 
     if (status === 'success') return <div className="world-page-container"><section className="reading-content-section"><div className="section-shell"><div className="survey-container-box form-success-banner"><div className="success-icon">✓</div><h1>Thank you for contributing.</h1><p>Your molecular characterisation survey response has been recorded.</p><button className="btn-primary-dark" onClick={() => { setAnswersState({}); setSection(0); setStatus('idle'); }}>Submit another response</button></div></div></section></div>;
 

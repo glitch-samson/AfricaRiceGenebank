@@ -15,14 +15,22 @@ export default function AdminDashboard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
+    const [authResolved, setAuthResolved] = useState(false);
     const [responses, setResponses] = useState<Response[]>([]);
     const [error, setError] = useState('');
 
     const load = async () => {
-        const response = await fetch('/api/admin/responses', { cache: 'no-store' });
-        if (!response.ok) return setLoggedIn(false);
-        setResponses((await response.json()).responses ?? []);
-        setLoggedIn(true);
+        try {
+            const response = await fetch('/api/admin/responses', { cache: 'no-store' });
+            if (!response.ok) {
+                setLoggedIn(false);
+                return;
+            }
+            setResponses((await response.json()).responses ?? []);
+            setLoggedIn(true);
+        } finally {
+            setAuthResolved(true);
+        }
     };
     useEffect(() => { void load(); }, []);
 
@@ -39,6 +47,8 @@ export default function AdminDashboard() {
         setLoggedIn(false);
         setResponses([]);
     };
+
+    if (!authResolved) return <main className="admin-loading" aria-label="Loading admin workspace"><div className="admin-loading-mark">RB</div><span>Checking admin session</span></main>;
 
     if (!loggedIn) return <main className="admin-shell"><div className="admin-login"><span className="section-eyebrow">RBCA administration</span><h1>Control center</h1><p>Sign in with an administrator profile to manage surveys and responses.</p><form onSubmit={login}><label className="form-field"><span>Admin email</span><input type="email" required autoFocus value={email} onChange={(event) => setEmail(event.target.value)} /></label><label className="form-field"><span>Password</span><input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} /></label><button className="btn-primary-dark" type="submit">Enter dashboard</button>{error && <p className="survey-error" role="alert">{error}</p>}</form></div></main>;
 

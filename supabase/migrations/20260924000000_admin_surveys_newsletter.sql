@@ -23,6 +23,11 @@ create table public.newsletter_subscribers (
     updated_at timestamptz not null default now()
 );
 
+alter table public.survey_responses add column survey_slug text;
+create index survey_responses_survey_slug_idx on public.survey_responses (survey_slug);
+alter table public.survey_responses drop constraint if exists survey_responses_email_normalized_key;
+alter table public.survey_responses add constraint survey_responses_survey_email_unique unique (survey_slug, email_normalized);
+
 create index surveys_status_idx on public.surveys (status);
 create index newsletter_subscribers_status_idx on public.newsletter_subscribers (status);
 
