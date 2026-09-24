@@ -139,7 +139,6 @@ alter table public.admin_audit_log enable row level security;
 
 create policy "Public reads accession catalogue" on public.accessions for select to anon, authenticated using (true);
 create policy "Users read own profile" on public.profiles for select to authenticated using (id = auth.uid());
-create policy "Users update own profile" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
 create policy "Authenticated users read own drafts" on public.survey_drafts for select to authenticated using (email = lower(auth.jwt() ->> 'email'));
 create policy "Authenticated users create own drafts" on public.survey_drafts for insert to authenticated with check (email = lower(auth.jwt() ->> 'email'));
 create policy "Authenticated users update own drafts" on public.survey_drafts for update to authenticated using (email = lower(auth.jwt() ->> 'email')) with check (email = lower(auth.jwt() ->> 'email'));

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
+import { clearAdminSession } from '@/lib/adminAuth';
 
 export async function POST() {
-    const response = NextResponse.json({ ok: true });
-    response.cookies.set('rbca_admin', '', { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV === 'production', path: '/', maxAge: 0 });
-    return response;
+    await clearAdminSession();
+    return NextResponse.json({ ok: true });
 }
