@@ -1,6 +1,10 @@
 /.phpunit.cache
 /node_modules
 /dist
+/.next
+/.vercel
+*.tsbuildinfo
+/coverage
 /public/build
 /public/hot
 /public/storage

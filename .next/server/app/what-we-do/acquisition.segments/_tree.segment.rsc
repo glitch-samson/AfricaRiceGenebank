@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/1dfeefedrqwnk.css","style"]
-:HL["/files/img/africarice.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"what-we-do","param":null,"prefetchHints":4192,"slots":{"children":{"name":"acquisition","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"_XxVpljaYCXOp-tKIQkeU"}
