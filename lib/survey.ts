@@ -5,6 +5,7 @@ export type SurveyQuestion = {
     type?: 'text' | 'email' | 'textarea' | 'select' | 'multi' | 'matrix' | 'rank';
     options?: string[];
     conditional?: string;
+    required?: boolean;
 };
 
 export type SurveySection = { title: string; questions: SurveyQuestion[] };

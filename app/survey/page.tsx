@@ -21,7 +21,8 @@ function normalizePublishedSurveys(value: unknown): PublishedSurvey[] {
             if (!question || typeof question !== 'object') return [];
             const itemQuestion = question as Partial<SurveyQuestion>;
             if (!itemQuestion.id || !itemQuestion.label) return [];
-            return [{ id: itemQuestion.id, number: itemQuestion.number || `Q${index + 1}`, label: itemQuestion.label, type: supportedQuestionTypes.has(itemQuestion.type || '') ? itemQuestion.type : 'text', options: Array.isArray(itemQuestion.options) ? itemQuestion.options.filter((option): option is string => typeof option === 'string') : [] }];
+            const isEmailQuestion = itemQuestion.type === 'email' || /email/i.test(`${itemQuestion.id} ${itemQuestion.label}`);
+            return [{ id: itemQuestion.id, number: itemQuestion.number || `Q${index + 1}`, label: itemQuestion.label, type: isEmailQuestion ? 'email' : supportedQuestionTypes.has(itemQuestion.type || '') ? itemQuestion.type : 'text', options: Array.isArray(itemQuestion.options) ? itemQuestion.options.filter((option): option is string => typeof option === 'string') : [], required: itemQuestion.required === true }];
         }) : [];
         return [{ id: item.id, slug: item.slug, title: item.title, description: item.description || null, questions }];
     });
@@ -70,10 +71,10 @@ function QuestionField({ question, answers, setAnswers }: { question: SurveyQues
     if (question.type === 'multi') return <fieldset className="survey-options"><legend>{question.label}</legend>{question.options?.map((option) => <label className="survey-option" key={option}><input type="checkbox" checked={Array.isArray(value) && value.includes(option)} onChange={(event) => updateMulti(option, event.target.checked)} /> <span>{option}</span></label>)}</fieldset>;
     if (question.type === 'matrix' || question.type === 'rank') {
         const matrix = typeof value === 'object' && !Array.isArray(value) ? value : {};
-        return <fieldset className="survey-matrix"><legend>{question.label}</legend>{question.options?.map((row) => <label className="survey-matrix-row" key={row}><span>{row}</span><select value={matrix[row] ?? ''} onChange={(event) => setAnswers(question.id, { ...matrix, [row]: event.target.value })}><option value="">Select</option>{(question.type === 'rank' ? ['1', '2', '3'] : ['1', '2', '3', '4', '5']).map((option) => <option key={option} value={option}>{option}</option>)}</select></label>)}</fieldset>;
+        return <fieldset className="survey-matrix"><legend>{question.label}{question.required ? ' *' : ''}</legend>{question.options?.map((row) => <label className="survey-matrix-row" key={row}><span>{row}</span><select required={question.required} value={matrix[row] ?? ''} onChange={(event) => setAnswers(question.id, { ...matrix, [row]: event.target.value })}><option value="">Select</option>{(question.type === 'rank' ? ['1', '2', '3'] : ['1', '2', '3', '4', '5']).map((option) => <option key={option} value={option}>{option}</option>)}</select></label>)}</fieldset>;
     }
-    if (question.type === 'select') return <label className="form-field"><span>{question.number}: {question.label}</span><select value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)}><option value="">Select an answer</option>{question.options?.map((option) => <option key={option}>{option}</option>)}</select></label>;
-    return <label className="form-field"><span>{question.number}: {question.label}</span>{question.type === 'textarea' ? <textarea rows={4} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} /> : <input type={question.type === 'email' ? 'email' : 'text'} required={question.type === 'email'} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} />}</label>;
+    if (question.type === 'select') return <label className="form-field"><span>{question.number}: {question.label}{question.required ? ' *' : ''}</span><select required={question.required} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)}><option value="">Select an answer</option>{question.options?.map((option) => <option key={option}>{option}</option>)}</select></label>;
+    return <label className="form-field"><span>{question.number}: {question.label}{question.required ? ' *' : ''}</span>{question.type === 'textarea' ? <textarea required={question.required} rows={4} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} /> : <input type={question.type === 'email' ? 'email' : 'text'} required={question.required || question.type === 'email'} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} />}</label>;
 }
 
 function ShortSurvey({ type, onBack }: { type: 'feedback' | 'nars'; onBack: () => void }) {
@@ -93,19 +94,32 @@ function ShortSurvey({ type, onBack }: { type: 'feedback' | 'nars'; onBack: () =
 
 function DynamicSurvey({ survey, onBack }: { survey: PublishedSurvey; onBack: () => void }) {
     const [answers, setAnswersState] = useState<Answers>({});
+    const [respondentEmail, setRespondentEmail] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState(false);
+    const hasEmailQuestion = survey.questions.some((question) => question.type === 'email' || /email/i.test(`${question.id} ${question.label}`));
     const setAnswer = (id: string, value: Answers[string]) => setAnswersState((current) => ({ ...current, [id]: value }));
     const submit = async (event: FormEvent) => {
         event.preventDefault();
         setError(false);
-        const response = await fetch('/api/survey/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ surveySlug: survey.slug, answers }) });
+        const emailQuestion = survey.questions.find((question) => question.type === 'email' || /email/i.test(`${question.id} ${question.label}`));
+        const answerEmail = emailQuestion ? String(answers[emailQuestion.id] ?? '').trim() : '';
+        const missingRequired = survey.questions.some((question) => {
+            if (!question.required) return false;
+            const value = answers[question.id];
+            return value === undefined || value === '' || (Array.isArray(value) && value.length === 0) || (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+        });
+        if (missingRequired) {
+            setError(true);
+            return;
+        }
+        const response = await fetch('/api/survey/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ surveySlug: survey.slug, respondentEmail: respondentEmail.trim() || answerEmail, answers }) });
         if (response.ok) setSubmitted(true);
         else setError(true);
     };
     if (submitted) return <div className="survey-container-box survey-complete"><span className="survey-complete-mark">✓</span><h2>Thank you for sharing your response.</h2><p>Your answers have been recorded and will help guide AfricaRice Genebank work.</p><button className="btn-primary-dark" onClick={onBack}>Explore another survey</button></div>;
     if (survey.questions.length === 0) return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><h2>{survey.title}</h2><p>This survey is published but has no questions yet. Please check back soon.</p></div>;
-    return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><div className="survey-form-heading"><span className="survey-icon blue">⌁</span><div><span className="section-eyebrow">AfricaRice Genebank</span><h2>{survey.title}</h2><p>{survey.questions.length} questions</p></div></div><form onSubmit={submit} className="survey-form-inner short-survey-form">{survey.questions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between"><button type="button" className="btn-secondary-outline" onClick={onBack}>Back</button><button type="submit" className="btn-primary-dark">Submit response ↗</button></div>{error && <p role="alert" className="survey-error">We could not save your response. Please check the required email field and try again.</p>}</form></div>;
+    return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><div className="survey-form-heading"><span className="survey-icon blue">⌁</span><div><span className="section-eyebrow">AfricaRice Genebank</span><h2>{survey.title}</h2><p>{survey.questions.length} questions</p></div></div><form onSubmit={submit} className="survey-form-inner short-survey-form">{!hasEmailQuestion && <label className="form-field"><span>Email address</span><input type="email" required value={respondentEmail} onChange={(event) => setRespondentEmail(event.target.value)} /></label>}{survey.questions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between"><button type="button" className="btn-secondary-outline" onClick={onBack}>Back</button><button type="submit" className="btn-primary-dark">Submit response ↗</button></div>{error && <p role="alert" className="survey-error">We could not save your response. Please check the required email field and try again.</p>}</form></div>;
 }
 
 export default function SurveyPage() {

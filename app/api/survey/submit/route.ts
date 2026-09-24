@@ -27,7 +27,8 @@ export async function POST(request: Request) {
         const answers = { ...(body?.answers ?? {}) } as Record<string, unknown>;
         if (surveyType) answers._survey_type = surveyType;
         const answerEntries = Object.entries(answers);
-        const emailAnswer = surveyType === 'nars' ? answers.q3_email : surveyType === 'feedback' ? answers.q1_email : surveyType === 'molecular' ? answers.q2_email : answerEntries.find(([key]) => /email/i.test(key))?.[1];
+        const explicitEmail = typeof body?.respondentEmail === 'string' ? body.respondentEmail.trim() : '';
+        const emailAnswer = explicitEmail || (surveyType === 'nars' ? answers.q3_email : surveyType === 'feedback' ? answers.q1_email : surveyType === 'molecular' ? answers.q2_email : answerEntries.find(([key]) => /email/i.test(key))?.[1]);
         const email = typeof emailAnswer === 'string' ? emailAnswer.trim() : '';
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) return NextResponse.json({ error: 'A valid email address is required.' }, { status: 400 });
 
@@ -48,9 +49,13 @@ export async function POST(request: Request) {
         };
         if (surveyType === 'molecular' && (!record.q38_ranked_needs || !record.q50_ranked_support)) return NextResponse.json({ error: 'Q38 and Q50 each require exactly three unique ranks.' }, { status: 400 });
         const { error } = await database().from('survey_responses').upsert(record, { onConflict: 'survey_slug,email_normalized' });
-        if (error) return NextResponse.json({ error: 'Could not save survey response.' }, { status: 500 });
+        if (error) {
+            console.error('Survey response database error:', error);
+            return NextResponse.json({ error: 'Could not save survey response.' }, { status: 500 });
+        }
         return NextResponse.json({ ok: true });
-    } catch {
+    } catch (error) {
+        console.error('Survey submission error:', error);
         return NextResponse.json({ error: 'Could not save survey response.' }, { status: 500 });
     }
 }
