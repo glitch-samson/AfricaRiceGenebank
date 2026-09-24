@@ -30,8 +30,6 @@ function responseMatches(response: ResponseRow, query: string, country: string) 
 }
 
 export default function SurveyAdminPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [responses, setResponses] = useState<ResponseRow[]>([]);
     const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -61,14 +59,6 @@ export default function SurveyAdminPage() {
     };
 
     useEffect(() => { void load(); }, []);
-
-    const login = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setError('');
-        const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-        if (!response.ok) return setError('Invalid admin credentials or inactive admin profile.');
-        await load();
-    };
 
     const logout = async () => {
         await fetch('/api/admin/logout', { method: 'POST' });
@@ -107,7 +97,7 @@ export default function SurveyAdminPage() {
     const institutions = new Set(responses.map((response) => response.institution).filter(Boolean)).size;
     const latest = responses[0]?.submitted_at;
 
-    if (!loggedIn) return <main className="admin-shell"><div className="admin-login"><span className="section-eyebrow">RBCA survey administration</span><h1>Survey dashboard</h1><p>Sign in with an administrator profile to manage surveys and response archives.</p><form onSubmit={login}><label className="form-field"><span>Admin email</span><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoFocus /></label><label className="form-field"><span>Password</span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label><button className="btn-primary-dark" type="submit">Sign in</button>{error && <p role="alert" className="survey-error">{error}</p>}</form></div></main>;
+    if (!loggedIn) return <main className="admin-shell"><div className="admin-login"><span className="section-eyebrow">RBCA administration</span><h1>Sign in required</h1><p>Open the admin control center first, then enter the survey workspace from there.</p><a className="btn-primary-dark" href="/admin">Go to admin sign in</a></div></main>;
 
     return <main className="admin-shell">
         <div className="admin-header">
