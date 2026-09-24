@@ -4,6 +4,8 @@
 /.next
 /.vercel
 *.tsbuildinfo
+AGENTS.md
+CLAUDE.md
 /coverage
 .git
 /public/build
