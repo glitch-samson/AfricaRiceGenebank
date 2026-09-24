@@ -8,6 +8,17 @@ React/Vite frontend for the Dr. Monty P. Jones Rice Biodiversity Center for Afri
 2. Install dependencies with `npm install`.
 3. Start the frontend with `npm run dev`.
 
+### Admin access
+
+Create administrator identities in Supabase Auth, then create a matching profile from the SQL editor:
+
+```sql
+insert into public.profiles (id, display_name, role)
+values ('AUTH_USER_UUID', 'RBCA Administrator', 'admin');
+```
+
+Set `ADMIN_SESSION_SECRET` to a long random value in local and Vercel environment variables. The admin dashboard only accepts Supabase Auth credentials whose profile role is `admin`; credentials are never stored in source code.
+
 Apply the database schema with the Supabase CLI:
 
 ```powershell
