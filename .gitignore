@@ -5,6 +5,7 @@
 /.vercel
 *.tsbuildinfo
 /coverage
+.git
 /public/build
 /public/hot
 /public/storage
