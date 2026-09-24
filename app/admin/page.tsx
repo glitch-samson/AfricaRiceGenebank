@@ -12,23 +12,32 @@ const modules = [
 type Response = { institution: string | null; country: string | null; submitted_at: string };
 
 export default function AdminDashboard() {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
+    const [authResolved, setAuthResolved] = useState(false);
     const [responses, setResponses] = useState<Response[]>([]);
     const [error, setError] = useState('');
 
     const load = async () => {
-        const response = await fetch('/api/admin/responses', { cache: 'no-store' });
-        if (!response.ok) return setLoggedIn(false);
-        setResponses((await response.json()).responses ?? []);
-        setLoggedIn(true);
+        try {
+            const response = await fetch('/api/admin/responses', { cache: 'no-store' });
+            if (!response.ok) {
+                setLoggedIn(false);
+                return;
+            }
+            setResponses((await response.json()).responses ?? []);
+            setLoggedIn(true);
+        } finally {
+            setAuthResolved(true);
+        }
     };
     useEffect(() => { void load(); }, []);
 
     const login = async (event: React.FormEvent) => {
         event.preventDefault();
-        const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
-        if (!response.ok) return setError('Invalid admin password.');
+        const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+        if (!response.ok) return setError('Invalid admin credentials or inactive admin profile.');
         setError('');
         await load();
     };
@@ -39,7 +48,9 @@ export default function AdminDashboard() {
         setResponses([]);
     };
 
-    if (!loggedIn) return <main className="admin-shell"><div className="admin-login"><span className="section-eyebrow">RBCA administration</span><h1>Control center</h1><p>Sign in to manage surveys, responses, and future RBCA communication tools.</p><form onSubmit={login}><label className="form-field"><span>Admin password</span><input type="password" required autoFocus value={password} onChange={(event) => setPassword(event.target.value)} /></label><button className="btn-primary-dark" type="submit">Enter dashboard</button>{error && <p className="survey-error" role="alert">{error}</p>}</form></div></main>;
+    if (!authResolved) return <main className="admin-loading" aria-label="Loading admin workspace"><div className="admin-loading-mark">RB</div><span>Checking admin session</span></main>;
+
+    if (!loggedIn) return <main className="admin-shell"><div className="admin-login"><span className="section-eyebrow">RBCA administration</span><h1>Control center</h1><p>Sign in with an administrator profile to manage surveys and responses.</p><form onSubmit={login}><label className="form-field"><span>Admin email</span><input type="email" required autoFocus value={email} onChange={(event) => setEmail(event.target.value)} /></label><label className="form-field"><span>Password</span><input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} /></label><button className="btn-primary-dark" type="submit">Enter dashboard</button>{error && <p className="survey-error" role="alert">{error}</p>}</form></div></main>;
 
     const institutions = new Set(responses.map((response) => response.institution).filter(Boolean)).size;
     const countries = new Set(responses.map((response) => response.country).filter(Boolean)).size;
