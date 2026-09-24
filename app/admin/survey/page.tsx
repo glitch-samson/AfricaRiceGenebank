@@ -28,6 +28,13 @@ type Survey = {
 type QuestionKind = 'text' | 'email' | 'textarea' | 'select' | 'multi' | 'matrix' | 'rank';
 type ManagedQuestion = { id: string; number: string; label: string; type: QuestionKind; options?: string[]; required?: boolean };
 
+const defaultSurveyQuestions: ManagedQuestion[] = [
+    { id: 'respondent_name', number: 'Q1', label: 'Full name', type: 'text', options: [], required: true },
+    { id: 'respondent_email', number: 'Q2', label: 'Email address', type: 'email', options: [], required: true },
+    { id: 'respondent_institution', number: 'Q3', label: 'Institution / Organization', type: 'text', options: [], required: false },
+    { id: 'respondent_country', number: 'Q4', label: 'Country', type: 'text', options: [], required: true },
+];
+
 const questionKinds: Array<{ value: QuestionKind; label: string }> = [
     { value: 'text', label: 'Short text' },
     { value: 'textarea', label: 'Long text' },
@@ -49,7 +56,7 @@ function normalizeQuestions(questions: unknown[]) {
 }
 
 function QuestionBuilder({ questions, onChange }: { questions: ManagedQuestion[]; onChange: (questions: ManagedQuestion[]) => void }) {
-    const [number, setNumber] = useState('');
+    const [number, setNumber] = useState(() => `Q${questions.length + 1}`);
     const [label, setLabel] = useState('');
     const [type, setType] = useState<QuestionKind>('text');
     const [options, setOptions] = useState('');
@@ -58,7 +65,7 @@ function QuestionBuilder({ questions, onChange }: { questions: ManagedQuestion[]
     const addQuestion = () => {
         if (!label.trim()) return;
         onChange([...questions, { id: `question_${Date.now()}`, number: number.trim() || `Q${questions.length + 1}`, label: label.trim(), type, options: needsOptions ? options.split('\n').map((option) => option.trim()).filter(Boolean) : [], required }]);
-        setNumber('');
+        setNumber(`Q${questions.length + 2}`);
         setLabel('');
         setType('text');
         setOptions('');
@@ -109,7 +116,7 @@ export default function SurveyAdminPage() {
     const [surveyTitle, setSurveyTitle] = useState('');
     const [surveySlug, setSurveySlug] = useState('');
     const [surveyDescription, setSurveyDescription] = useState('');
-    const [createQuestions, setCreateQuestions] = useState<ManagedQuestion[]>([]);
+    const [createQuestions, setCreateQuestions] = useState<ManagedQuestion[]>(defaultSurveyQuestions);
     const [editingSurveyId, setEditingSurveyId] = useState<number | null>(null);
     const [editingQuestions, setEditingQuestions] = useState<ManagedQuestion[]>([]);
     const [surveyModal, setSurveyModal] = useState<'create' | 'edit' | null>(null);
@@ -158,7 +165,7 @@ export default function SurveyAdminPage() {
         setSurveyTitle('');
         setSurveySlug('');
         setSurveyDescription('');
-        setCreateQuestions([]);
+        setCreateQuestions(defaultSurveyQuestions);
         setSurveyModal(null);
     };
 
@@ -227,7 +234,7 @@ export default function SurveyAdminPage() {
             <div className="admin-metric"><span>Latest submission</span><strong>{latest ? new Date(latest).toLocaleDateString() : '—'}</strong><small>{latest ? new Date(latest).toLocaleTimeString() : 'No submissions yet'}</small></div>
         </section>
         <section className="admin-survey-manager">
-            <div className="admin-section-heading"><div><span className="section-eyebrow">Survey builder</span><h2>Create and manage surveys</h2></div><div className="admin-section-actions"><span className="admin-result-count">{surveys.length} configured</span><button className="btn-primary-dark" type="button" onClick={() => { setSurveyTitle(''); setSurveySlug(''); setSurveyDescription(''); setCreateQuestions([]); setSurveyError(''); setSurveyModal('create'); }}>New survey</button></div></div>
+            <div className="admin-section-heading"><div><span className="section-eyebrow">Survey builder</span><h2>Create and manage surveys</h2></div><div className="admin-section-actions"><span className="admin-result-count">{surveys.length} configured</span><button className="btn-primary-dark" type="button" onClick={() => { setSurveyTitle(''); setSurveySlug(''); setSurveyDescription(''); setCreateQuestions(defaultSurveyQuestions); setSurveyError(''); setSurveyModal('create'); }}>New survey</button></div></div>
             {surveyError && <p role="alert" className="survey-error">{surveyError}</p>}
             <div className="admin-survey-list">{surveys.map((survey) => <article className="admin-survey-item" key={survey.id}><div className="admin-survey-summary"><strong>{survey.title}</strong><small>/{survey.slug} · Updated {new Date(survey.updated_at).toLocaleDateString()}</small>{survey.description && <p>{survey.description}</p>}<span className="admin-question-count">{survey.questions.length} question{survey.questions.length === 1 ? '' : 's'}</span></div><div className="admin-survey-actions"><select value={survey.status} onChange={(event) => void updateSurveyStatus(survey, event.target.value as Survey['status'])} aria-label={`Status for ${survey.title}`}><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select><button type="button" className="btn-secondary-outline" onClick={() => beginQuestionEdit(survey)}>Edit questions</button><button type="button" className="admin-close" onClick={() => void deleteSurvey(survey)} aria-label={`Delete ${survey.title}`}>×</button></div></article>)}</div>
         </section>

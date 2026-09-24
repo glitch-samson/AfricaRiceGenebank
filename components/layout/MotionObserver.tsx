@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export default function MotionObserver() {
     useEffect(() => {
-        const selector = '[data-reveal], [data-stagger-parent] > *, main:not(.admin-app) section, .facts-strip-grid > *, .workflow-steps-quad > *, .survey-choice-card, .admin-module-card';
+        const selector = '[data-reveal], [data-stagger-parent] > *, .facts-strip-grid > *, .workflow-steps-quad > *, .survey-choice-card, .admin-module-card';
         document.body.classList.add('motion-ready');
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const motionNames = ['motion-rise', 'motion-slide-left', 'motion-slide-right', 'motion-scale', 'motion-blur', 'motion-flip', 'motion-rotate', 'motion-clip', 'motion-wipe', 'motion-bounce', 'motion-elastic', 'motion-drift'];
