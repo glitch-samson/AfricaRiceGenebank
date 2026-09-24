@@ -1,314 +1,114 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import DataBadge from '@/components/ui/DataBadge';
-import StatCard from '@/components/ui/StatCard';
-import Link from 'next/link';
+import { allSurveyQuestions, surveySections, SurveyQuestion } from '@/lib/survey';
 
-export default function SurveyPage() {
-    const [step, setStep] = useState(1);
-    const [submitted, setSubmitted] = useState(false);
-    const [surveyData, setSurveyData] = useState({
-        recipientName: '',
-        institution: '',
-        smtaNumber: '',
-        speciesReceived: 'Oryza sativa',
-        germinationRate: '>90%',
-        traitObservations: '',
-        publicationsGenerated: '',
-        overallSatisfaction: 'Very Satisfied',
-    });
+type Answers = Record<string, string | string[] | Record<string, string>>;
 
-    const handleNext = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (step < 3) {
-            setStep(step + 1);
-        } else {
-            setSubmitted(true);
-        }
+type SurveyType = 'molecular' | 'feedback' | 'nars';
+
+const surveyCatalog: Array<{ type: SurveyType; eyebrow: string; title: string; description: string; time: string; questions: string; accent: string }> = [
+    { type: 'molecular', eyebrow: 'CGIAR Genebank Accelerator', title: 'Molecular Characterisation', description: 'Map your genebank capacity, sequencing experience, infrastructure, data practice, and appetite for collaborative DSI generation.', time: '15–20 min', questions: '54 questions', accent: 'gold' },
+    { type: 'feedback', eyebrow: 'AfricaRice Genebank', title: 'Genebank User Feedback', description: 'Tell us how AfricaRice germplasm supports your work, from material requests and useful traits to seed quality and service delivery.', time: '5–7 min', questions: '11 questions', accent: 'green' },
+    { type: 'nars', eyebrow: 'NARS Partners', title: 'Rice Genetic Resources Evaluation', description: 'Share the stress traits, facilities, hotspot locations, and conservation priorities that could shape future collaboration with AfricaRice.', time: '3–5 min', questions: '9 questions', accent: 'blue' },
+];
+
+const shortSurveyQuestions: Record<'feedback' | 'nars', SurveyQuestion[]> = {
+    feedback: [
+        { id: 'q1_email', number: 'Q1', label: 'Please enter your e-mail address.', type: 'email' },
+        { id: 'q2_institution', number: 'Q2', label: 'Please enter your institution.', type: 'text' },
+        { id: 'q3_group', number: 'Q3', label: 'Which group best classifies your institution?', type: 'select', options: ['CGIAR Center', 'NARS', 'University', 'Individual', 'Famer'] },
+        { id: 'q4_requested', number: 'Q4', label: 'Have you requested germplasm from AfricaRice Genebank at least once?', type: 'select', options: ['Yes', 'No'] },
+        { id: 'q5_traits', number: 'Q5', label: 'Which traits inform your decision to use AfricaRice germplasm?', type: 'multi', options: ['Drought Resistance', 'Heat Resistance', 'Flooding Resistance', 'Salinity', 'Insect Resistance', 'Pests Resistance', 'Diseases', 'Yield', 'Quality/nutrition'] },
+        { id: 'q6_results', number: 'Q6', label: 'What results have you received from AfricaRice germplasm?', type: 'multi', options: ['Still being evaluated', 'Scientific publication', 'Characterization and evaluation data', 'Identification of traits', 'Genes/markers generated', 'Expanded germplasm options', 'Advanced breeding lines', 'Improved variety or new cultivar', 'Digital sequence information generated', 'Direct planting material'] },
+        { id: 'q7_future_traits', number: 'Q7', label: 'What traits would inform your future requests?', type: 'multi', options: ['Drought resistance', 'Nutrition/quality enhancing', 'Resistance to other diseases', 'Yield enhancing', 'Salinity tolerance', 'Resistance to insect pests', 'Heat tolerance', 'Tolerance to waterlogging', 'Resistance to other pests', 'Other traits (specify)'] },
+        { id: 'q8_usage', number: 'Q8', label: 'What percentage of AfricaRice accessions are used in your research and non-research activities?', type: 'text' },
+        { id: 'q9_seed_quality', number: 'Q9', label: 'How would you rate the quality of seeds received?', type: 'select', options: ['High', 'Average', 'Poor'] },
+        { id: 'q10_service', number: 'Q10', label: 'How would you rate germplasm service delivery?', type: 'select', options: ['High', 'Average', 'Poor'] },
+        { id: 'q11_comments', number: 'Q11', label: 'How could AfricaRice improve germplasm distribution services?', type: 'textarea' },
+    ],
+    nars: [
+        { id: 'q1_name', number: 'Q1', label: 'Nom et Prénoms (Full Name)', type: 'text' },
+        { id: 'q2_institution', number: 'Q2', label: 'Institution de Provenance (Affiliated Institution)', type: 'text' },
+        { id: 'q3_email', number: 'Q3', label: 'Adresse Email (Email Address)', type: 'email' },
+        { id: 'q4_contact', number: 'Q4', label: 'Contact WhatsApp (Phone Number with WhatsApp Access)', type: 'text' },
+        { id: 'q5_traits', number: 'Q5', label: 'Which stress traits are you most interested in screening for?', type: 'multi', options: ['Drought tolerance', 'Salinity tolerance', 'Heat tolerance', 'Iron toxicity', 'Anaerobic germination', 'Flood tolerance', 'Disease resistance', 'Pest resistance (AfRGM)', 'Nutrient-use efficiency', 'Others (please specify)'] },
+        { id: 'q6_facilities', number: 'Q6', label: 'What facilities are available in your country or institution?', type: 'multi', options: ['Laboratory', 'Field testing stations', 'Greenhouse', 'Controlled environment chambers', 'Others (please specify)'] },
+        { id: 'q7_hotspot', number: 'Q7', label: 'Do you have access to hotspot locations for screening the selected traits?', type: 'select', options: ['Yes', 'No'] },
+        { id: 'q8_location', number: 'Q8', label: 'Please provide the location details (department, region, or village).', type: 'textarea' },
+        { id: 'q9_conservation', number: 'Q9', label: 'Are valuable rice genetic resources in your country endangered and in need of conservation or collection?', type: 'select', options: ['Yes', 'No'] },
+    ],
+};
+
+function QuestionField({ question, answers, setAnswers }: { question: SurveyQuestion; answers: Answers; setAnswers: (id: string, value: Answers[string]) => void }) {
+    const value = answers[question.id] ?? (question.type === 'multi' ? [] : question.type === 'matrix' || question.type === 'rank' ? {} : '');
+    const updateMulti = (option: string, checked: boolean) => {
+        const selected = Array.isArray(value) ? value : [];
+        setAnswers(question.id, checked ? [...selected, option] : selected.filter((item) => item !== option));
     };
 
-    return (
-        <div className="world-page-container">
-            <div className="section-shell">
-                <Breadcrumbs items={[{ label: 'Germplasm Recipient Survey' }]} />
-            </div>
+    if (question.type === 'multi') return <fieldset className="survey-options"><legend>{question.label}</legend>{question.options?.map((option) => <label className="survey-option" key={option}><input type="checkbox" checked={Array.isArray(value) && value.includes(option)} onChange={(event) => updateMulti(option, event.target.checked)} /> <span>{option}</span></label>)}</fieldset>;
+    if (question.type === 'matrix' || question.type === 'rank') {
+        const matrix = typeof value === 'object' && !Array.isArray(value) ? value : {};
+        return <fieldset className="survey-matrix"><legend>{question.label}</legend>{question.options?.map((row) => <label className="survey-matrix-row" key={row}><span>{row}</span><select value={matrix[row] ?? ''} onChange={(event) => setAnswers(question.id, { ...matrix, [row]: event.target.value })}><option value="">Select</option>{(question.type === 'rank' ? ['1', '2', '3'] : ['1', '2', '3', '4', '5']).map((option) => <option key={option} value={option}>{option}</option>)}</select></label>)}</fieldset>;
+    }
+    if (question.type === 'select') return <label className="form-field"><span>{question.number}: {question.label}</span><select value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)}><option value="">Select an answer</option>{question.options?.map((option) => <option key={option}>{option}</option>)}</select></label>;
+    return <label className="form-field"><span>{question.number}: {question.label}</span>{question.type === 'textarea' ? <textarea rows={4} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} /> : <input type={question.type === 'email' ? 'email' : 'text'} required={question.type === 'email'} value={String(value)} onChange={(event) => setAnswers(question.id, event.target.value)} />}</label>;
+}
 
-            {/* Hero Section */}
-            <section className="world-page-hero">
-                <div className="section-shell">
-                    <div className="page-hero-grid">
-                        <div className="page-hero-text">
-                            <div className="hero-badge-row">
-                                <DataBadge variant="gold">CGIAR Impact Monitoring</DataBadge>
-                                <DataBadge variant="emerald">Germplasm Feedback</DataBadge>
-                            </div>
-                            <h1 className="world-page-title">
-                                CGIAR Germplasm Performance <em>Evaluation Survey</em>
-                            </h1>
-                            <p className="world-page-lead">
-                                If your research team or university has received rice seed samples from the AfricaRice Genebank under an SMTA, your feedback directly informs our germination monitoring, seed multiplication schedules, and international crop improvement reports.
-                            </p>
-                            <div className="hero-cta-group">
-                                <a href="#survey-start" className="btn-primary-dark">
-                                    Start Evaluation Survey ↓
-                                </a>
-                                <Link href="/request-germplasm" className="btn-secondary-outline">
-                                    Request New Seeds (SMTA)
-                                </Link>
-                            </div>
-                        </div>
+function ShortSurvey({ type, onBack }: { type: 'feedback' | 'nars'; onBack: () => void }) {
+    const [answers, setAnswersState] = useState<Answers>({});
+    const [submitted, setSubmitted] = useState(false);
+    const questions = shortSurveyQuestions[type];
+    const setAnswer = (id: string, value: Answers[string]) => setAnswersState((current) => ({ ...current, [id]: value }));
+    const submit = async (event: FormEvent) => {
+        event.preventDefault();
+        const response = await fetch('/api/survey/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ surveyType: type, answers }) });
+        if (response.ok) setSubmitted(true);
+    };
+    if (submitted) return <div className="survey-container-box survey-complete"><span className="survey-complete-mark">✓</span><h2>Thank you for sharing your experience.</h2><p>Your response will help AfricaRice improve how it conserves, evaluates, and shares rice genetic resources.</p><button className="btn-primary-dark" onClick={onBack}>Explore another survey</button></div>;
+    const catalog = surveyCatalog.find((item) => item.type === type)!;
+    return <div className="survey-container-box"><button className="survey-back-link" onClick={onBack}>← All surveys</button><div className="survey-form-heading"><span className={`survey-icon ${catalog.accent}`}>{type === 'feedback' ? '↗' : '⌁'}</span><div><span className="section-eyebrow">{catalog.eyebrow}</span><h2>{catalog.title}</h2><p>{catalog.time} · {catalog.questions}</p></div></div><form onSubmit={submit} className="survey-form-inner short-survey-form">{questions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between"><button type="button" className="btn-secondary-outline" onClick={onBack}>Back</button><button type="submit" className="btn-primary-dark">Submit response ↗</button></div></form></div>;
+}
 
-                        <div className="page-hero-media">
-                            <img
-                                src="/files/img/ques.jpg"
-                                alt="Researcher evaluating rice plants in the field"
-                                className="hero-rounded-image"
-                            />
-                            <div className="hero-caption-pill">
-                                <span>Evaluating distributed germplasm performance in trial plots</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+export default function SurveyPage() {
+    const [selectedSurvey, setSelectedSurvey] = useState<SurveyType | null>(null);
+    const [section, setSection] = useState(0);
+    const [answers, setAnswersState] = useState<Answers>({});
+    const [status, setStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+    const current = surveySections[section];
+    const visibleQuestions = useMemo(() => current.questions.filter((question) => {
+        if (!question.conditional) return true;
+        if (question.conditional.includes('Q10a')) return answers.q10a_involved === 'Yes';
+        if (question.conditional.includes('Q14')) return answers.q14_wgs === 'Yes, for a plant genome';
+        if (question.conditional.includes('Q20')) return answers.q20_ploidy_knowledge === 'Yes, for some crops';
+        if (question.conditional.includes('Q29a')) return answers.q29a_computing !== 'No, we rely on external collaborators';
+        if (question.conditional.includes('Q36a')) return answers.q36a_collaborate === 'Yes';
+        if (question.conditional.includes('Q36c')) return answers.q36c_broader === 'Yes';
+        if (question.conditional.includes('Q41')) return answers.q41_law === 'Yes, existing law / regulation';
+        if (question.conditional.includes('Q42')) return answers.q42_policy === 'Yes' || answers.q42_policy === 'Under development';
+        if (question.conditional.includes('Q43')) return answers.q43_uncertainty === 'Yes, considerable uncertainty';
+        if (question.conditional.includes('Q44')) return answers.q44_partnership === 'Yes';
+        if (question.conditional.includes('Q47')) return question.conditional.includes('not Not interested') ? answers.q47_interest !== 'Not interested' : answers.q47_interest === 'Not interested';
+        return true;
+    }), [answers, current]);
 
-            {/* Facts Rail */}
-            <section className="facts-strip-section">
-                <div className="section-shell">
-                    <div className="facts-strip-grid">
-                        <StatCard
-                            value="3"
-                            label="Survey Sections"
-                            sublabel="Takes less than 4 minutes to complete"
-                        />
-                        <StatCard
-                            value="164"
-                            label="Recipient Institutions"
-                            sublabel="Contributing to continuous genebank QMS"
-                        />
-                        <StatCard
-                            value="100%"
-                            label="Confidential Data"
-                            sublabel="Aggregated for CGIAR annual reports"
-                        />
-                        <StatCard
-                            value="Direct Impact"
-                            label="On Seed Multiplication"
-                            sublabel="Guides prioritization of regeneration cycles"
-                        />
-                    </div>
-                </div>
-            </section>
+    const setAnswer = (id: string, value: Answers[string]) => setAnswersState((currentAnswers) => ({ ...currentAnswers, [id]: value }));
+    const submit = async (event: FormEvent) => {
+        event.preventDefault();
+        if (section < surveySections.length - 1) return setSection(section + 1);
+        setStatus('saving');
+        const response = await fetch('/api/survey/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ surveyType: 'molecular', answers }) });
+        setStatus(response.ok ? 'success' : 'error');
+    };
 
-            {/* Interactive Multi-Step Form */}
-            <section className="reading-content-section" id="survey-start">
-                <div className="section-shell">
-                    <div className="survey-container-box">
-                        <div className="survey-progress-header">
-                            <div className="step-indicator">
-                                <span className={`step-circle ${step >= 1 ? 'active' : ''}`}>1</span>
-                                <span className="step-text">Recipient & Order</span>
-                            </div>
-                            <div className="step-line" />
-                            <div className="step-indicator">
-                                <span className={`step-circle ${step >= 2 ? 'active' : ''}`}>2</span>
-                                <span className="step-text">Germination & Growth</span>
-                            </div>
-                            <div className="step-line" />
-                            <div className="step-indicator">
-                                <span className={`step-circle ${step >= 3 ? 'active' : ''}`}>3</span>
-                                <span className="step-text">Research Outcomes</span>
-                            </div>
-                        </div>
+    if (!selectedSurvey) return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }]} /></div><section className="survey-hub-hero"><div className="section-shell"><span className="section-eyebrow">AfricaRice Genebank · Have your say</span><h1>Choose the survey that fits <em>your work.</em></h1><p>Every response helps us make rice diversity more useful, more accessible, and better protected for the next generation.</p><div className="survey-hub-signals"><span><strong>3</strong> survey paths</span><span><strong>1</strong> shared purpose</span><span><strong>100%</strong> practical impact</span></div></div></section><section className="reading-content-section"><div className="section-shell"><div className="survey-catalog">{surveyCatalog.map((survey, index) => <button className={`survey-choice-card ${survey.accent}`} key={survey.type} onClick={() => { setSelectedSurvey(survey.type); setSection(0); }}><span className="survey-card-number">0{index + 1}</span><span className={`survey-icon ${survey.accent}`}>{survey.type === 'molecular' ? '⌬' : survey.type === 'feedback' ? '↗' : '⌁'}</span><span className="section-eyebrow">{survey.eyebrow}</span><h2>{survey.title}</h2><p>{survey.description}</p><span className="survey-card-meta"><b>{survey.time}</b><span>{survey.questions}</span><strong>Start survey →</strong></span></button>)}</div><div className="survey-hub-note"><span>Not sure where to begin?</span> Choose Molecular Characterisation if you manage or support a genebank; choose User Feedback if you have requested AfricaRice germplasm; choose NARS Evaluation if you are exploring stress screening or conservation partnerships.</div></div></section></div>;
 
-                        {submitted ? (
-                            <div className="form-success-banner">
-                                <div className="success-icon">✓</div>
-                                <h3>Thank You for Your Evaluation!</h3>
-                                <p>
-                                    Your responses have been logged in the AfricaRice Quality Management System. Your feedback helps ensure that AfricaRice seed collections remain the highest quality standard for global food security research.
-                                </p>
-                                <button
-                                    type="button"
-                                    className="btn-primary-dark"
-                                    onClick={() => {
-                                        setSubmitted(false);
-                                        setStep(1);
-                                    }}
-                                >
-                                    Submit Another Survey
-                                </button>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleNext} className="survey-form-inner">
-                                {step === 1 && (
-                                    <div className="survey-step-content">
-                                        <h3>Step 1: Recipient & Order Identification</h3>
-                                        <div className="form-row">
-                                            <div className="form-field">
-                                                <label>Principal Investigator / Contact Name *</label>
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    placeholder="e.g. Dr. Aissatou Diallo"
-                                                    value={surveyData.recipientName}
-                                                    onChange={(e) =>
-                                                        setSurveyData({ ...surveyData, recipientName: e.target.value })
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="form-field">
-                                                <label>Institution / Organization *</label>
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    placeholder="e.g. University of Abidjan / ISRA"
-                                                    value={surveyData.institution}
-                                                    onChange={(e) =>
-                                                        setSurveyData({ ...surveyData, institution: e.target.value })
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
+    if (selectedSurvey !== 'molecular') return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Survey Hub' }, { label: surveyCatalog.find((survey) => survey.type === selectedSurvey)?.title || '' }]} /></div><section className="reading-content-section survey-flow-section"><div className="section-shell"><ShortSurvey type={selectedSurvey} onBack={() => setSelectedSurvey(null)} /></div></section></div>;
 
-                                        <div className="form-row">
-                                            <div className="form-field">
-                                                <label>SMTA Order Number / Year Received</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="e.g. SMTA-2023-042"
-                                                    value={surveyData.smtaNumber}
-                                                    onChange={(e) =>
-                                                        setSurveyData({ ...surveyData, smtaNumber: e.target.value })
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="form-field">
-                                                <label>Primary Species Received *</label>
-                                                <select
-                                                    value={surveyData.speciesReceived}
-                                                    onChange={(e) =>
-                                                        setSurveyData({ ...surveyData, speciesReceived: e.target.value })
-                                                    }
-                                                >
-                                                    <option value="Oryza sativa">Oryza sativa (Asian Rice)</option>
-                                                    <option value="Oryza glaberrima">Oryza glaberrima (African Rice)</option>
-                                                    <option value="Interspecifics">NERICA / ARICA Interspecifics</option>
-                                                    <option value="Wild Relatives">Wild African Relatives (Oryza spp.)</option>
-                                                </select>
-                                            </div>
-                                        </div>
+    if (status === 'success') return <div className="world-page-container"><section className="reading-content-section"><div className="section-shell"><div className="survey-container-box form-success-banner"><div className="success-icon">✓</div><h1>Thank you for contributing.</h1><p>Your molecular characterisation survey response has been recorded.</p><button className="btn-primary-dark" onClick={() => { setAnswersState({}); setSection(0); setStatus('idle'); }}>Submit another response</button></div></div></section></div>;
 
-                                        <div className="survey-btn-row">
-                                            <button type="submit" className="btn-primary-dark">
-                                                Continue to Step 2 →
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {step === 2 && (
-                                    <div className="survey-step-content">
-                                        <h3>Step 2: Germination & Field Agronomic Performance</h3>
-                                        <div className="form-field">
-                                            <label>Observed Seed Germination Rate *</label>
-                                            <select
-                                                value={surveyData.germinationRate}
-                                                onChange={(e) =>
-                                                    setSurveyData({ ...surveyData, germinationRate: e.target.value })
-                                                }
-                                            >
-                                                <option value=">90%">&gt; 90% (Excellent viability)</option>
-                                                <option value="75-90%">75% – 90% (Satisfactory)</option>
-                                                <option value="50-75%">50% – 75% (Moderate)</option>
-                                                <option value="<50%">&lt; 50% (Low / Dormancy issues)</option>
-                                            </select>
-                                        </div>
-
-                                        <div className="form-field">
-                                            <label>Notable Agronomic or Stress Trait Observations</label>
-                                            <textarea
-                                                rows={4}
-                                                placeholder="Describe trial performance: drought response, disease tolerance, tillering capacity, flowering time, or unexpected phenotypes..."
-                                                value={surveyData.traitObservations}
-                                                onChange={(e) =>
-                                                    setSurveyData({ ...surveyData, traitObservations: e.target.value })
-                                                }
-                                            />
-                                        </div>
-
-                                        <div className="survey-btn-row flex-between">
-                                            <button
-                                                type="button"
-                                                className="btn-secondary-outline"
-                                                onClick={() => setStep(1)}
-                                            >
-                                                ← Back to Step 1
-                                            </button>
-                                            <button type="submit" className="btn-primary-dark">
-                                                Continue to Step 3 →
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {step === 3 && (
-                                    <div className="survey-step-content">
-                                        <h3>Step 3: Research Outcomes & Final Feedback</h3>
-                                        <div className="form-field">
-                                            <label>Publications, Patents, or Breeding Lines Generated</label>
-                                            <textarea
-                                                rows={3}
-                                                placeholder="List citations, DOIs, thesis titles, or new variety registrations that utilized these seed accessions..."
-                                                value={surveyData.publicationsGenerated}
-                                                onChange={(e) =>
-                                                    setSurveyData({
-                                                        ...surveyData,
-                                                        publicationsGenerated: e.target.value,
-                                                    })
-                                                }
-                                            />
-                                        </div>
-
-                                        <div className="form-field">
-                                            <label>Overall Satisfaction with AfricaRice Genebank Service *</label>
-                                            <select
-                                                value={surveyData.overallSatisfaction}
-                                                onChange={(e) =>
-                                                    setSurveyData({
-                                                        ...surveyData,
-                                                        overallSatisfaction: e.target.value,
-                                                    })
-                                                }
-                                            >
-                                                <option value="Very Satisfied">Very Satisfied</option>
-                                                <option value="Satisfied">Satisfied</option>
-                                                <option value="Neutral">Neutral</option>
-                                                <option value="Needs Improvement">Needs Improvement</option>
-                                            </select>
-                                        </div>
-
-                                        <div className="survey-btn-row flex-between">
-                                            <button
-                                                type="button"
-                                                className="btn-secondary-outline"
-                                                onClick={() => setStep(2)}
-                                            >
-                                                ← Back to Step 2
-                                            </button>
-                                            <button type="submit" className="btn-primary-dark">
-                                                Submit Completed Evaluation ↗
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </form>
-                        )}
-                    </div>
-                </div>
-            </section>
-        </div>
-    );
+    return <div className="world-page-container"><div className="section-shell"><Breadcrumbs items={[{ label: 'Molecular Characterisation Survey' }]} /></div><section className="world-page-hero"><div className="section-shell"><div className="page-hero-grid"><div className="page-hero-text"><div className="hero-badge-row"><DataBadge variant="gold">CGIAR Genebank Accelerator</DataBadge><DataBadge variant="emerald">AoW5</DataBadge></div><h1 className="world-page-title">Molecular Characterisation <em>Survey</em></h1><p className="world-page-lead">Survey of National Genebank Managers: strengthening NARS partner capacity for integrated in-situ and ex-situ conservation.</p></div><div className="page-hero-media"><img src="/files/cgiarsurvey/images/overview.jpg" alt="Rice genetic resources in a genebank" className="hero-rounded-image" /></div></div></div></section><section className="reading-content-section" id="survey-start"><div className="section-shell"><div className="survey-container-box"><div className="survey-progress-header"><strong>Section {section + 1} of {surveySections.length}</strong><span>{allSurveyQuestions.length} questions</span></div><h2>{current.title}</h2><p className="survey-note">Fields marked with a question number are saved as structured answers. Conditional questions appear when relevant.</p><form onSubmit={submit} className="survey-form-inner">{visibleQuestions.map((question) => <QuestionField key={question.id} question={question} answers={answers} setAnswers={setAnswer} />)}<div className="survey-btn-row flex-between">{section > 0 && <button type="button" className="btn-secondary-outline" onClick={() => setSection(section - 1)}>← Previous</button>}<button type="submit" className="btn-primary-dark">{section === surveySections.length - 1 ? (status === 'saving' ? 'Submitting…' : 'Submit survey') : 'Continue →'}</button></div>{status === 'error' && <p role="alert" className="survey-error">We could not save your response. Please try again.</p>}</form></div></div></section></div>;
 }
