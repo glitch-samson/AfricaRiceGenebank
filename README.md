@@ -33,3 +33,15 @@ supabase db push
 ```
 
 The migration in `supabase/migrations/20260918000000_rbca_backend.sql` owns the application backend schema, constraints, timestamp triggers, and row-level security. Supabase Auth owns identities; service-role operations must run in Edge Functions or another trusted server environment and must never be bundled into the browser.
+
+### Website assistant
+
+The public site includes a floating RBCA assistant in `components/layout/ChatAssistant.tsx` and the server endpoint is `app/api/chat/route.ts`. It works without an AI provider by returning guided navigation answers. To enable an OpenAI-compatible model, add these server-only Vercel variables and redeploy:
+
+```text
+AI_API_KEY=your-provider-key
+AI_BASE_URL=https://api.openai.com/v1
+AI_MODEL=gemini-3.8-flash
+```
+
+The API key never reaches the browser. Accession retrieval is handled server-side through `/api/catalogue/search` and is injected into chat context before the model responds. To add trait and availability answers, connect the same helper to an authoritative public trait/Genesys dataset, pass only matching records to the model, and link users back to the source record. Do not let the model invent accession numbers, trait values, or stock availability.
