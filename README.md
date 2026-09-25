@@ -17,7 +17,14 @@ insert into public.profiles (id, display_name, role)
 values ('AUTH_USER_UUID', 'RBCA Administrator', 'admin');
 ```
 
-Set `ADMIN_SESSION_SECRET` to a long random value in local and Vercel environment variables. The admin dashboard only accepts Supabase Auth credentials whose profile role is `admin`; credentials are never stored in source code.
+Set these server-side environment variables in local and Vercel environment settings:
+
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_SESSION_SECRET`
+
+Redeploy after changing Vercel variables. The admin dashboard only accepts Supabase Auth credentials whose profile role is `admin`; credentials are never stored in source code.
 
 Apply the database schema with the Supabase CLI:
 
