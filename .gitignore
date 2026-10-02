@@ -27,3 +27,11 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Local dev-server and chat smoke-test artifacts
+dev.pid
+dev-server.log
+dev-out.log
+dev-err.log
+*smoke*.log
+probe.log
