@@ -34,7 +34,7 @@ export default function SafetyDuplicationPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/what-we-do/regeneration" className="btn-primary-dark">
-                                    Next Stage: Seed Regeneration ↗
+                                    Next Stage: Seed Regeneration
                                 </Link>
                                 <a
                                     href="https://www.croptrust.org/our-work/svalbard-global-seed-vault/"

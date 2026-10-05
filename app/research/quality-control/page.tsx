@@ -34,7 +34,7 @@ export default function QualityControlPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/what-we-do/conservation" className="btn-primary-dark">
-                                    Cold Vault Storage Protocols ↗
+                                    Cold Vault Storage Protocols
                                 </Link>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
                                     Quality Guarantees for Seed Orders

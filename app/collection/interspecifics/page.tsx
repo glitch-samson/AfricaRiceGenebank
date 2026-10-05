@@ -34,7 +34,7 @@ export default function InterspecificsPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request NERICA / ARICA Lines (SMTA) ↗
+                                    Request NERICA / ARICA Lines (SMTA)
                                 </Link>
                                 <Link href="/research/genomics" className="btn-secondary-outline">
                                     View DArTseq Relatedness Data
@@ -135,7 +135,7 @@ export default function InterspecificsPage() {
                                     Genomic DArTseq fingerprinting verifies that introgression segments from <em>O. glaberrima</em> remain stable across seed multiplications, preventing genetic drift.
                                 </p>
                                 <Link href="/data/genomics" className="btn-secondary-outline full-width">
-                                    Explore Genomic Introgression Data ↗
+                                    Explore Genomic Introgression Data
                                 </Link>
                             </div>
                         </div>

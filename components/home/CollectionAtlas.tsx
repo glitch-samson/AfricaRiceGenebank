@@ -213,7 +213,7 @@ export default function CollectionAtlas() {
 
                         <div className="species-card-actions">
                             <Link href={activeSpecies.href} className="btn-primary-dark">
-                                Explore {activeSpecies.scientificName} Details <span>↗</span>
+                                Explore {activeSpecies.scientificName} Details
                             </Link>
                             <Link href="/request-germplasm" className="btn-secondary-outline">
                                 Request Seed Samples (SMTA)

@@ -103,7 +103,7 @@ export default function Footer() {
                     <div className="footer-col">
                         <h4>Access & Compliance</h4>
                         <ul>
-                            <li><Link href="/request-germplasm" className="footer-cta-link">Order Seeds via SMTA ↗</Link></li>
+                            <li><Link href="/request-germplasm" className="footer-cta-link">Order Seeds via SMTA</Link></li>
                             <li><Link href="/survey">Recipient Evaluation Survey</Link></li>
                             <li><Link href="/about">Dr. Monty Jones Legacy</Link></li>
                             <li><Link href="/contact">Visiting & Contacts</Link></li>

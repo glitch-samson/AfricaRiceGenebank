@@ -218,7 +218,6 @@ export default function Header() {
 
                     <Link className="nav-cta-btn" href="/request-germplasm" onClick={closeNav}>
                         <span>Request Germplasm</span>
-                        <span className="arrow-icon">↗</span>
                     </Link>
                 </nav>
             </div>

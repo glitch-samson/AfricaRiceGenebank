@@ -33,7 +33,7 @@ export default function RegenerationPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/what-we-do/characterization" className="btn-primary-dark">
-                                    Next Stage: Characterization ↗
+                                    Next Stage: Characterization
                                 </Link>
                                 <Link href="/research/quality-control" className="btn-secondary-outline">
                                     Molecular QC & Purity Checks
@@ -132,7 +132,7 @@ export default function RegenerationPage() {
                                     The genomic profile is compared directly with the baseline passport fingerprint. If any off-types or outcrossing events are detected, the seed lot is quarantined or discarded.
                                 </p>
                                 <Link href="/research/quality-control" className="btn-secondary-outline full-width">
-                                    View Molecular QC Workflow ↗
+                                    View Molecular QC Workflow
                                 </Link>
                             </div>
                         </div>

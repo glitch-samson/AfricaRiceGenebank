@@ -27,7 +27,7 @@ export default function DataPortalPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data/genomics" className="btn-primary-dark">
-                                    Genomic Datasets ↗
+                                    Genomic Datasets
                                 </Link>
                                 <a
                                     href="https://www.genesys-pgr.org/wiews/CIV033"
@@ -117,7 +117,7 @@ export default function DataPortalPage() {
                                     <li>Direct Genesys basket order links</li>
                                 </ul>
                                 <Link href="/data/subsets" className="btn-primary-dark full-width">
-                                    Explore Subsets Data ↗
+                                    Explore Subsets Data
                                 </Link>
                             </div>
                         </div>
@@ -139,7 +139,7 @@ export default function DataPortalPage() {
                                     <li>Principal Component Analysis (PCA) coordinates</li>
                                 </ul>
                                 <Link href="/data/genomics" className="btn-primary-dark full-width">
-                                    Explore Genomics Datasets ↗
+                                    Explore Genomics Datasets
                                 </Link>
                             </div>
                         </div>
@@ -161,7 +161,7 @@ export default function DataPortalPage() {
                                     <li>Drought, RYMV, and gall midge response scores</li>
                                 </ul>
                                 <Link href="/data/characterization" className="btn-primary-dark full-width">
-                                    Explore Trait Datasets ↗
+                                    Explore Trait Datasets
                                 </Link>
                             </div>
                         </div>

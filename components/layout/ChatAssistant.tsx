@@ -95,6 +95,20 @@ export default function ChatAssistant() {
         }
     }, [open, messages, loading]);
 
+    useEffect(() => {
+        if (!open) return;
+        const previousOverflow = document.body.style.overflow;
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setOpen(false);
+        };
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', closeOnEscape);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener('keydown', closeOnEscape);
+        };
+    }, [open]);
+
     const resetChat = () => {
         setMessages([initialGreeting]);
         setInput('');
@@ -161,7 +175,8 @@ export default function ChatAssistant() {
     return (
         <>
             {open && (
-                <section className="chat-assistant-panel" aria-label="RBCA genebank assistant">
+                <div className="chat-assistant-overlay" onMouseDown={() => setOpen(false)}>
+                <section className="chat-assistant-panel" role="dialog" aria-modal="true" aria-label="RBCA genebank assistant" onMouseDown={(event) => event.stopPropagation()}>
                     <header className="chat-assistant-header">
                         <div>
                             <span className="section-eyebrow">RBCA Assistant</span>
@@ -221,7 +236,6 @@ export default function ChatAssistant() {
                                             {message.links.map((link) => (
                                                 <a href={link.href} key={link.href}>
                                                     <span>{link.label}</span>
-                                                    <span>→</span>
                                                 </a>
                                             ))}
                                         </div>
@@ -290,6 +304,7 @@ export default function ChatAssistant() {
                         </button>
                     </form>
                 </section>
+                </div>
             )}
 
             <button

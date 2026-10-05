@@ -57,7 +57,7 @@ export default function GenomicsHighlight() {
 
                         <div className="genomics-actions">
                             <Link href="/research/genomics" className="btn-primary-dark">
-                                Explore Genomics Research ↗
+                                Explore Genomics Research
                             </Link>
                             <Link href="/data/genomics" className="btn-secondary-outline">
                                 Access Genomic Datasets

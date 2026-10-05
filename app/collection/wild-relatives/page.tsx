@@ -34,7 +34,7 @@ export default function WildRelativesPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request Wild Taxa (SMTA) ↗
+                                    Request Wild Taxa (SMTA)
                                 </Link>
                                 <a
                                     href="https://www.gbif.org"

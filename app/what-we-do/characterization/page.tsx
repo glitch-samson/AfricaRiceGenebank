@@ -33,7 +33,7 @@ export default function CharacterizationPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data/characterization" className="btn-primary-dark">
-                                    Browse Trait Descriptor Data ↗
+                                    Browse Trait Descriptor Data
                                 </Link>
                                 <Link href="/what-we-do/distribution" className="btn-secondary-outline">
                                     Next Stage: Global Distribution

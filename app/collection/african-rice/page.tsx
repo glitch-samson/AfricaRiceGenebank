@@ -34,7 +34,7 @@ export default function AfricanRicePage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request Glaberrima Accessions (SMTA) ↗
+                                    Request Glaberrima Accessions (SMTA)
                                 </Link>
                                 <Link href="/data/subsets" className="btn-secondary-outline">
                                     Download 350 Mini-Core List
@@ -128,7 +128,7 @@ export default function AfricanRicePage() {
                                     This panel represents the full geographic and genetic spectrum—from Senegambian coastal lowlands to the Guinean highlands—reducing evaluation costs for phenotyping trials by 90%.
                                 </p>
                                 <Link href="/data/subsets" className="btn-secondary-outline full-width">
-                                    Access Mini-Core Data ↗
+                                    Access Mini-Core Data
                                 </Link>
                             </div>
                         </div>
