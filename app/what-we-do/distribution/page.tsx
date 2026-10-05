@@ -34,7 +34,7 @@ export default function DistributionPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Submit Germplasm Request ↗
+                                    Submit Germplasm Request
                                 </Link>
                                 <a
                                     href="https://www.fao.org/plant-treaty/areas-of-work/the-multilateral-system/smta/en/"
@@ -150,7 +150,7 @@ export default function DistributionPage() {
                                 </div>
 
                                 <Link href="/request-germplasm" className="btn-primary-dark full-width">
-                                    Start an SMTA Seed Order ↗
+                                    Start an SMTA Seed Order
                                 </Link>
                             </div>
                         </div>

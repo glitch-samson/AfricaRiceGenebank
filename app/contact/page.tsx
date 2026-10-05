@@ -46,7 +46,7 @@ export default function ContactPage() {
                                     Send Direct Message ↓
                                 </a>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
-                                    Order Germplasm (SMTA) ↗
+                                    Order Germplasm (SMTA)
                                 </Link>
                             </div>
                         </div>
@@ -196,7 +196,7 @@ export default function ContactPage() {
                                     </div>
 
                                     <button type="submit" className="btn-primary-dark full-width">
-                                        Send Inquiry ↗
+                                        Send Inquiry
                                     </button>
                                 </form>
                             )}

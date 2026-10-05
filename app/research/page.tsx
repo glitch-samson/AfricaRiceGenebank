@@ -27,7 +27,7 @@ export default function ResearchPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/research/genomics" className="btn-primary-dark">
-                                    Explore Genomics Program ↗
+                                    Explore Genomics Program
                                 </Link>
                                 <Link href="/publications" className="btn-secondary-outline">
                                     Peer-Reviewed Publications
@@ -111,7 +111,7 @@ export default function ResearchPage() {
                                     <li>Open FAIR data deposited in Genesys</li>
                                 </ul>
                                 <Link href="/research/genomics" className="btn-primary-dark full-width">
-                                    View Genomics Details ↗
+                                    View Genomics Details
                                 </Link>
                             </div>
                         </div>
@@ -132,7 +132,7 @@ export default function ResearchPage() {
                                     <li>High-integrity seed certification for breeders</li>
                                 </ul>
                                 <Link href="/research/quality-control" className="btn-primary-dark full-width">
-                                    View Quality Control Details ↗
+                                    View Quality Control Details
                                 </Link>
                             </div>
                         </div>
@@ -153,7 +153,7 @@ export default function ResearchPage() {
                                     <li>Accelerated trait screening for drought and blast</li>
                                 </ul>
                                 <Link href="/research/sub-setting" className="btn-primary-dark full-width">
-                                    View Sub-Setting Details ↗
+                                    View Sub-Setting Details
                                 </Link>
                             </div>
                         </div>

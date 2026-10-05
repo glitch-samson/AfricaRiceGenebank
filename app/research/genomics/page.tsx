@@ -34,7 +34,7 @@ export default function GenomicsResearchPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data/genomics" className="btn-primary-dark">
-                                    Download Genotypic Datasets ↗
+                                    Download Genotypic Datasets
                                 </Link>
                                 <Link href="/publications" className="btn-secondary-outline">
                                     Read Flagship Genomics Monograph
@@ -136,7 +136,7 @@ export default function GenomicsResearchPage() {
                                     Led by Dr. Marie-Noelle Ndjiondjop and AfricaRice scientists, this landmark volume details the protocols, bioinformatic pipelines, and case studies of deploying DArTseq markers in genebank stewardship.
                                 </p>
                                 <Link href="/publications" className="btn-primary-dark full-width">
-                                    Explore Book & Publications ↗
+                                    Explore Book & Publications
                                 </Link>
                             </div>
                         </div>

@@ -33,7 +33,7 @@ export default function AcquisitionPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/what-we-do/conservation" className="btn-primary-dark">
-                                    Next Stage: Conservation Vaults ↗
+                                    Next Stage: Conservation Vaults
                                 </Link>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
                                     Germplasm Request Guidelines
@@ -138,7 +138,7 @@ export default function AcquisitionPage() {
                                     This guarantees that genetic resources remain global public goods, freely accessible to plant breeders worldwide under the Standard Material Transfer Agreement (SMTA).
                                 </p>
                                 <Link href="/what-we-do/distribution" className="btn-secondary-outline full-width">
-                                    Review SMTA Distribution Terms ↗
+                                    Review SMTA Distribution Terms
                                 </Link>
                             </div>
                         </div>

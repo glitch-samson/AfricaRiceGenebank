@@ -30,7 +30,7 @@ export default function AboutPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Access Germplasm (SMTA) ↗
+                                    Access Germplasm (SMTA)
                                 </Link>
                                 <Link href="/collection" className="btn-secondary-outline">
                                     Explore the Collection

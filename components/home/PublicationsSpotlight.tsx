@@ -15,7 +15,7 @@ export default function PublicationsSpotlight() {
                     </div>
                     <div>
                         <Link href="/publications" className="btn-secondary-outline">
-                            View All Publications ↗
+                            View All Publications
                         </Link>
                     </div>
                 </div>
@@ -49,7 +49,7 @@ export default function PublicationsSpotlight() {
 
                             <div className="book-actions">
                                 <Link href="/publications" className="btn-primary-dark">
-                                    Read Publication Overview <span>↗</span>
+                                    Read Publication Overview
                                 </Link>
                                 <a
                                     href="https://rbca.africarice.org/"
@@ -71,7 +71,7 @@ export default function PublicationsSpotlight() {
                             <p>Demonstrating distinct regional sub-populations across West Africa and highlighting unexploited alleles for drought tolerance.</p>
                             <div className="article-meta-row">
                                 <span className="meta-doi">DOI: 10.1002/csc2.2023</span>
-                                <Link href="/publications" className="article-read-link">Read Summary →</Link>
+                                <Link href="/publications" className="article-read-link">Read Summary</Link>
                             </div>
                         </article>
 
@@ -81,7 +81,7 @@ export default function PublicationsSpotlight() {
                             <p>Analysis of 60+ quantitative and qualitative descriptors across 10,000+ accessions grown at the M'bé research station.</p>
                             <div className="article-meta-row">
                                 <span className="meta-doi">DOI: 10.1371/journal.pone.0212</span>
-                                <Link href="/publications" className="article-read-link">Read Summary →</Link>
+                                <Link href="/publications" className="article-read-link">Read Summary</Link>
                             </div>
                         </article>
 
@@ -91,7 +91,7 @@ export default function PublicationsSpotlight() {
                             <p>Harnessing wild African gene pools for introgression into high-yielding lowland cultivars.</p>
                             <div className="article-meta-row">
                                 <span className="meta-doi">DOI: 10.1007/s00122-021</span>
-                                <Link href="/publications" className="article-read-link">Read Summary →</Link>
+                                <Link href="/publications" className="article-read-link">Read Summary</Link>
                             </div>
                         </article>
                     </div>

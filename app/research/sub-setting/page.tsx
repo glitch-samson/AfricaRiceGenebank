@@ -34,7 +34,7 @@ export default function SubSettingPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data/subsets" className="btn-primary-dark">
-                                    Download Mini-Core Accessions ↗
+                                    Download Mini-Core Accessions
                                 </Link>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
                                     Order Mini-Core Panel
@@ -126,7 +126,7 @@ export default function SubSettingPage() {
                                     Within two seasons of screening the 350-accession panel, breeders successfully identified 12 novel donors for extreme vegetative drought tolerance and 6 donors immune to African Rice Gall Midge.
                                 </p>
                                 <Link href="/data/subsets" className="btn-primary-dark full-width">
-                                    Access 350 Mini-Core Dataset ↗
+                                    Access 350 Mini-Core Dataset
                                 </Link>
                             </div>
                         </div>

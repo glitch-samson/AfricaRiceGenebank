@@ -126,7 +126,7 @@ export default function OperationsLoop() {
                     </div>
                     <div className="operations-link-wrap">
                         <Link href="/what-we-do" className="btn-secondary-outline">
-                            View Operations Overview ↗
+                            View Operations Overview
                         </Link>
                     </div>
                 </div>
@@ -170,10 +170,10 @@ export default function OperationsLoop() {
 
                         <div className="op-action-row">
                             <Link href={curr.href} className="btn-primary-dark">
-                                Read Full {curr.title} Protocols <span>↗</span>
+                                Read Full {curr.title} Protocols
                             </Link>
                             <Link href="/request-germplasm" className="text-link-arrow">
-                                How to request conserved seed samples <span>→</span>
+                                How to request conserved seed samples
                             </Link>
                         </div>
                     </div>

@@ -101,7 +101,7 @@ export default function VideoShowcase() {
                         </a>
                         <Link href="/about" className="doc-link-item">
                             <span>🏛️ Read Full Inauguration & Facility History</span>
-                            <small>Learn about the February 2020 dedication ↗</small>
+                            <small>Learn about the February 2020 dedication</small>
                         </Link>
                     </div>
                 </div>
