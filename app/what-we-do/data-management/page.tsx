@@ -34,7 +34,7 @@ export default function DataManagementPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data" className="btn-primary-dark">
-                                    Access Open Data Portal ↗
+                                    Access Open Data Portal
                                 </Link>
                                 <a
                                     href="https://www.genesys-pgr.org/wiews/CIV033"

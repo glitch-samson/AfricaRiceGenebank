@@ -34,7 +34,7 @@ export default function AsianRicePage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request Sativa Accessions (SMTA) ↗
+                                    Request Sativa Accessions (SMTA)
                                 </Link>
                                 <Link href="/data/characterization" className="btn-secondary-outline">
                                     Phenotypic Descriptor Data
@@ -135,7 +135,7 @@ export default function AsianRicePage() {
                                     <li>✓ High amylose content preferred by local consumers</li>
                                 </ul>
                                 <Link href="/request-germplasm" className="btn-primary-dark full-width">
-                                    Request Sativa Seed Lots ↗
+                                    Request Sativa Seed Lots
                                 </Link>
                             </div>
                         </div>

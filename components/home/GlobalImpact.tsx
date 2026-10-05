@@ -83,7 +83,7 @@ export default function GlobalImpact() {
                         <div className="geo-footer-cta">
                             <span>Looking to utilize AfricaRice germplasm in your research?</span>
                             <Link href="/request-germplasm" className="btn-primary-dark">
-                                Request Germplasm Under SMTA ↗
+                                Request Germplasm Under SMTA
                             </Link>
                         </div>
                     </div>

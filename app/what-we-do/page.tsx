@@ -102,7 +102,7 @@ export default function WhatWeDoPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request Germplasm (SMTA) ↗
+                                    Request Germplasm (SMTA)
                                 </Link>
                                 <a
                                     href="https://www.fao.org/plant-treaty/en/"
@@ -187,7 +187,7 @@ export default function WhatWeDoPage() {
                                     <h3>{stage.title}</h3>
                                     <p>{stage.description}</p>
                                     <Link href={stage.href} className="stage-read-link">
-                                        Read Complete {stage.title} Procedures <span>→</span>
+                                        Read Complete {stage.title} Procedures
                                     </Link>
                                 </div>
                             </div>

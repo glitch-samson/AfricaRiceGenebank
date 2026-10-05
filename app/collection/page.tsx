@@ -27,7 +27,7 @@ export default function CollectionPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/request-germplasm" className="btn-primary-dark">
-                                    Request Seed Samples (SMTA) ↗
+                                    Request Seed Samples (SMTA)
                                 </Link>
                                 <a
                                     href="https://www.genesys-pgr.org/wiews/CIV033"
@@ -200,7 +200,7 @@ export default function CollectionPage() {
                                     <span>350 Mini-Core</span>
                                 </div>
                                 <Link href="/collection/african-rice" className="btn-primary-dark full-width">
-                                    View African Rice Profile <span>↗</span>
+                                    View African Rice Profile
                                 </Link>
                             </div>
                         </div>
@@ -220,7 +220,7 @@ export default function CollectionPage() {
                                     <span>14k+ DOIs</span>
                                 </div>
                                 <Link href="/collection/asian-rice" className="btn-primary-dark full-width">
-                                    View Asian Rice Profile <span>↗</span>
+                                    View Asian Rice Profile
                                 </Link>
                             </div>
                         </div>
@@ -240,7 +240,7 @@ export default function CollectionPage() {
                                     <span>35M Farmers Benefited</span>
                                 </div>
                                 <Link href="/collection/interspecifics" className="btn-primary-dark full-width">
-                                    View Interspecifics Profile <span>↗</span>
+                                    View Interspecifics Profile
                                 </Link>
                             </div>
                         </div>
@@ -260,7 +260,7 @@ export default function CollectionPage() {
                                     <span>GBIF Georeferenced</span>
                                 </div>
                                 <Link href="/collection/wild-relatives" className="btn-primary-dark full-width">
-                                    View Wild Relatives Profile <span>↗</span>
+                                    View Wild Relatives Profile
                                 </Link>
                             </div>
                         </div>

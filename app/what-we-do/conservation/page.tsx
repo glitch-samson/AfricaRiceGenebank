@@ -33,7 +33,7 @@ export default function ConservationPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/what-we-do/safety-duplication" className="btn-primary-dark">
-                                    Next: Safety Duplication at Svalbard ↗
+                                    Next: Safety Duplication at Svalbard
                                 </Link>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
                                     Request Conserved Seed Stocks

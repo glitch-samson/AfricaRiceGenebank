@@ -138,7 +138,7 @@ export default function PublicationsPage() {
                             </p>
                             <div className="hero-cta-group">
                                 <Link href="/data" className="btn-primary-dark">
-                                    Access Open Research Data ↗
+                                    Access Open Research Data
                                 </Link>
                                 <Link href="/request-germplasm" className="btn-secondary-outline">
                                     Request Cited Accessions (SMTA)
